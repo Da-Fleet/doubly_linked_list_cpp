@@ -6,6 +6,7 @@ private:
     T data;
     Node<T> *next;
     Node<T> *prev;
+    
 public:
     Node(T data){
         this->data = data;
@@ -33,13 +34,15 @@ public:
 };
 
 template <class T>
-class doubly_linkedlist
+class Doubly_linkedlist
 {
 private:
     Node<int> *head;
     Node<int> *tail;
     int size;
 public:
+
+#pragma region Add Methods
     void Insert(T data){
         Node<T> *newNode = new Node<T>(data);
         if(head == NULL){
@@ -82,8 +85,7 @@ public:
         }
         size++;
     }
-    
-    
+  
     void Push(T data){
         Node<T> *newNode = new Node<T>(data);
         if(head == NULL){
@@ -112,7 +114,9 @@ public:
         size++;
     
     }
-    
+#pragma endregion
+
+#pragma region Removing Methods
     void Delete(T data){
         Node<T> *temp = head;
         while(temp != NULL){
@@ -190,7 +194,9 @@ public:
             size--;
         }
     }
-    
+#pragma endregion
+
+#pragma region Properties Methods
     T headData(){
         return head->getData();
     }
@@ -202,16 +208,76 @@ public:
     int getSize(){
         return size;
     }
+#pragma endregion   
+
+#pragma region Seeker Methods
+    bool Search(T data){
+        Node<T> *temp = head;
+        while(temp != NULL){
+            if(temp->getData() == data){
+                return true;
+            }
+            temp = temp->getNext();
+        }
+        return false;
+    }
     
-    
+    int IndexOf(T data){
+        Node<T> *temp = head;
+        int index = 0;
+        while(temp != NULL){
+            if(temp->getData() == data){
+                return index;
+            }
+            temp = temp->getNext();
+            index++;
+        }
+        return -1;
+    }
+#pragma endregion
+
+#pragma region Get Methods
+    T Get(int n){
+        if(n > size){
+            cout << "Invalid Index" << endl;
+            return -1;
+        }
+        Node<T> *temp = head;
+        for(int i = 0; i < n; i++){
+            temp = temp->getNext();
+        }
+        return temp->getData();
+    }
+#pragma endregion
+
+#pragma region Set Methods
+    void Set(int n, T data){
+        if(n > size){
+            cout << "Invalid Index" << endl;
+            return;
+        }
+        Node<T> *temp = head;
+        for(int i = 0; i < n; i++){
+            temp = temp->getNext();
+        }
+        temp->setData(data);
+    }
+#pragma endregion
 };
 
-doubly_linkedlist::doubly_linkedlist(/* args */)
-{
+template <class T>
+Doubly_linkedlist::Doubly_linkedlist(T* data, int size){
+    for(int i = 0; i < size; i++){
+        Insert(data[i]);
+    }
 }
 
-doubly_linkedlist::~doubly_linkedlist()
+template <class T>
+Doubly_linkedlist::~Doubly_linkedlist()
 {
+   head = NULL;
+   tail = NULL;
+   size = 0;
 }
 
 
