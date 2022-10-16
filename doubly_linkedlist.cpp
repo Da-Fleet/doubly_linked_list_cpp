@@ -1,5 +1,7 @@
 #include "doubly_linkedlist.h"
 
+#pragma region Constructors and Destructors Implementations
+
 template <typename T>
 LinkedList<T>::LinkedList()
 {
@@ -7,6 +9,14 @@ LinkedList<T>::LinkedList()
     tail = nullptr;
     size = 0;
 }
+
+#pragma endregion
+
+#pragma region Getters and Setters Implementations
+
+#pragma endregion
+
+#pragma region Public Methods Implementations
 
 template <typename T>
 T LinkedList<T>::RemoveData(T data)
@@ -66,3 +76,5 @@ void LinkedList<T>::AddLast(T data)
         tail = node;
     }
 }
+
+#pragma endregion
