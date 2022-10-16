@@ -56,10 +56,17 @@ public:
     }    
 };
 
+#pragma region ctor and dtor
 template <typename T>
 LinkedList::LinkedList(T* data) {
     for_each(data.begin(), data.end(), [&](T& item) {
         add(item);
     });
+}
+
+LinkedList::~LinkedList() {
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
 }
 #pragma endregion
