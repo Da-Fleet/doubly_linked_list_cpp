@@ -14,13 +14,7 @@ class LinkedList {
     int size;
 
 public:
-    LinkedList(T* vector) {
-        for_each(vector, vector + sizeof(vector) / sizeof(vector[0]), [this](T data) {
-            this->push_back(data);
-        /// @brief 
-        /// @param vector 
-        });
-    }
+    LinkedList() {}
     void add(T data) {
         shared_ptr<Node> node(new Node(data));
         if (head == nullptr) {
@@ -62,4 +56,10 @@ public:
     }    
 };
 
+template <typename T>
+LinkedList::LinkedList(T* data) {
+    for_each(data, data + sizeof(data), [&](T& item) {
+        add(item);
+    });
+}
 #pragma endregion
