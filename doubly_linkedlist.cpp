@@ -7,13 +7,13 @@ LinkedList<T>::Node::Node(T data) : data(data) {}
 
 #pragma region Constructors and Destructors Implementations
 
-// template <class T>
-// LinkedList<T>::LinkedList()
-// {
-//     head = nullptr;
-//     tail = nullptr;
-//     size = 0;
-// }
+template <class T>
+LinkedList<T>::LinkedList()
+{
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+}
 
 template <class T>
 LinkedList<T>::LinkedList(initializer_list<T> list)
@@ -24,23 +24,23 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
     }
 }
 
-// template <class T>
-// LinkedList<T>::LinkedList(const LinkedList<T> &other)
-// {
-//     // swap(head, other.head);
-//     // swap(tail, other.tail);
-//     // swap(size, other.size);
+template <class T>
+LinkedList<T>::LinkedList(const LinkedList<T> &other)
+{
+    // swap(head, other.head);
+    // swap(tail, other.tail);
+    // swap(size, other.size);
 
-//     //TODO: Fix me!!!!
-// }
+    //TODO: Fix me!!!!
+}
 
-// template <class T>
-// LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
-// {
-//     // swap(*this, other);
-//     // return *this;
-//     //TODO: Fix me!!!!
-// }
+template <class T>
+LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
+{
+    // swap(*this, other);
+    // return *this;
+    //TODO: Fix me!!!!
+}
 
 #pragma endregion
 
