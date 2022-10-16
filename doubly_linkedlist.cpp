@@ -1,8 +1,10 @@
 #include "doubly_linkedlist.h"
 
+using namespace std;
+
 #pragma region Constructors and Destructors Implementations
 
-template <typename T>
+template <class T>
 LinkedList<T>::LinkedList()
 {
     head = nullptr;
@@ -10,21 +12,32 @@ LinkedList<T>::LinkedList()
     size = 0;
 }
 
-//Copy Semantics
-template <typename T>
-LinkedList<T>::LinkedList(const LinkedList<T>& other)
+template<class T>
+LinkedList<T>::LinkedList(std::initializer_list<T> list)
 {
-    using std::swap;
-    swap(head, other.head);
-    swap(tail, other.tail);
-    swap(size, other.size);
+    for (auto it = list.begin(); it != list.end(); it++)
+    {
+        this->AddLast(*it);
+    }
 }
 
-template <typename T>
-LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& other)
+// Copy Semantics
+template <class T>
+LinkedList<T>::LinkedList(const LinkedList<T> &other)
 {
-    swap(*this, other);
-    return *this;
+    // swap(head, other.head);
+    // swap(tail, other.tail);
+    // swap(size, other.size);
+
+    //TODO: Fix me!!!! 
+}
+
+template <class T>
+LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
+{
+    // swap(*this, other);
+    // return *this;
+    //TODO: Fix me!!!!
 }
 
 #pragma endregion
@@ -35,7 +48,7 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& other)
 
 #pragma region Public Methods Implementations
 
-template <typename T>
+template <class T>
 T LinkedList<T>::RemoveData(T data)
 {
     shared_ptr<Node> node = head;
@@ -65,7 +78,7 @@ T LinkedList<T>::RemoveData(T data)
     }
 }
 
-template <typename T>
+template <class T>
 void LinkedList<T>::Print()
 {
     shared_ptr<Node> node = head;
@@ -77,7 +90,7 @@ void LinkedList<T>::Print()
     cout << endl;
 }
 
-template <typename T>
+template <class T>
 void LinkedList<T>::AddLast(T data)
 {
     shared_ptr<Node> node(new Node(data));

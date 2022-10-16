@@ -1,12 +1,18 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include <initializer_list>
+#include <memory>
+#include <iostream>
+
+using namespace std;
+
 /**
  * @brief Doubly linked list
  *
  * @tparam T Generic type
  */
-template <typename T>
+template <class T>
 class LinkedList
 {
 private:
@@ -34,16 +40,22 @@ public:
      * @brief Construct a new Linked List< T> object
      *
      */
-    LinkedList<T>();
+    LinkedList();
 
-    //Copy Semmantics
+    /**
+     * @brief This constructor is a special kind of constructor, 
+     * called an initializer-list-constructor
+     * 
+     * @param list The list to initialize
+     */
+    LinkedList(initializer_list<T> list);
 
     /**
      * @brief Copy constructor
      *
-     * @param other
+     * @param other Other list
      */
-    LinkedList<T>(const LinkedList<T>& other);
+    LinkedList(const LinkedList<T>& other);
 
     /**
      * @brief Copy assignment operator
@@ -59,7 +71,7 @@ public:
      *
      * @param other
      */
-    LinkedList<T>(LinkedList<T> &&other);
+    LinkedList(LinkedList<T> &&other);
 
     #pragma endregion
 
