@@ -14,7 +14,6 @@ LinkedList<T>::LinkedList()
 template <typename T>
 LinkedList<T>::LinkedList(const LinkedList<T>& other)
 {
-    using std::swap;
     swap(head, other.head);
     swap(tail, other.tail);
     swap(size, other.size);
@@ -31,7 +30,6 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& other)
 template <typename T>
 LinkedList<T>::LinkedList(LinkedList<T> &&other)
 {
-    using std::swap;
     swap(head, other.head);
     swap(tail, other.tail);
     swap(size, other.size);
