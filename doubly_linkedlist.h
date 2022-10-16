@@ -61,6 +61,14 @@ public:
      */
     LinkedList<T>(LinkedList<T> &&other);
 
+    /**
+     * @brief Move assignment operator
+     * 
+     * @param other 
+     * @return LinkedList<T>& 
+     */
+    LinkedList<T>& operator=(LinkedList<T> &&other);
+
     #pragma endregion
 
     #pragma region Getters and Setters
