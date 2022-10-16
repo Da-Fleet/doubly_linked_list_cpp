@@ -15,7 +15,7 @@ private:
      *
      * @tparam T
      */
-    struct Node
+    class Node
     {
         T data;
         shared_ptr<Node> next;
@@ -36,6 +36,22 @@ public:
      */
     LinkedList<T>();
 
+    //Copy Semmantics
+
+    /**
+     * @brief Copy constructor
+     *
+     * @param other
+     */
+    LinkedList<T>(const LinkedList<T>& other);
+
+    /**
+     * @brief Copy assignment operator
+     *
+     * @param other
+     * @return LinkedList<T>&
+     */
+    LinkedList<T>& operator=(const LinkedList<T>& other);
 
     //Move Semantics
     /**
@@ -74,9 +90,15 @@ public:
      */
     void RemoveLast(int n);
 
-
-    void print();
-    void printReverse();
+    /**
+     * @brief 
+     * 
+     * @param data 
+     * @return T 
+     */
+    T RemoveData(T data);
+    void Print();
+    void PrintReverse();
     
     #pragma endregion
 };

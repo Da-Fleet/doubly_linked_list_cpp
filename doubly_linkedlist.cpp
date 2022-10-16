@@ -1,59 +1,97 @@
 #include "doubly_linkedlist.h"
 
-#pragma region Base doble linked list with smart pointers
+#pragma region Constructors and Destructors Implementations
+
 template <typename T>
-class LinkedList {
-    struct Node {
-        T data;
-        shared_ptr<Node> next;
-        weak_ptr<Node> prev;
-        Node(T data) : data(data) {}
-    };
-    shared_ptr<Node> head;
-    shared_ptr<Node> tail;
-    int size;
+LinkedList<T>::LinkedList()
+{
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+}
 
-public:
-    LinkedList() {}
-    void add(T data) {
-        shared_ptr<Node> node(new Node(data));
-        if (head == nullptr) {
-            head = node;
-            tail = node;
-        } else {
-            tail->next = node;
-            node->prev = tail;
-            tail = node;
-        }
-    }
-    void print() {
-        shared_ptr<Node> node = head;
-        while (node != nullptr) {
-            cout << node->data << " ";
-            node = node->next;
-        }
-        cout << endl;
-    }
+//Copy Semantics
+template <typename T>
+LinkedList<T>::LinkedList(const LinkedList<T>& other)
+{
+    using std::swap;
+    swap(head, other.head);
+    swap(tail, other.tail);
+    swap(size, other.size);
+}
 
-    void remove(T data) {
-        shared_ptr<Node> node = head;
-        while (node != nullptr) {
-            if (node->data == data) {
-                if (node->prev.lock() != nullptr) {
-                    node->prev.lock()->next = node->next;
-                } else {
-                    head = node->next;
-                }
-                if (node->next != nullptr) {
-                    node->next->prev = node->prev;
-                } else {
-                    tail = node->prev.lock();
-                }
-                break;
+template <typename T>
+LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& other)
+{
+    swap(*this, other);
+    return *this;
+}
+
+#pragma endregion
+
+#pragma region Getters and Setters Implementations
+
+#pragma endregion
+
+#pragma region Public Methods Implementations
+
+template <typename T>
+T LinkedList<T>::RemoveData(T data)
+{
+    shared_ptr<Node> node = head;
+    while (node != nullptr)
+    {
+        if (node->data == data)
+        {
+            if (node->prev.lock() != nullptr)
+            {
+                node->prev.lock()->next = node->next;
             }
-            node = node->next;
+            else
+            {
+                head = node->next;
+            }
+            if (node->next != nullptr)
+            {
+                node->next->prev = node->prev;
+            }
+            else
+            {
+                tail = node->prev.lock();
+            }
+            break;
         }
-    }    
-};
+        node = node->next;
+    }
+}
+
+template <typename T>
+void LinkedList<T>::Print()
+{
+    shared_ptr<Node> node = head;
+    while (node != nullptr)
+    {
+        cout << node->data << " ";
+        node = node->next;
+    }
+    cout << endl;
+}
+
+template <typename T>
+void LinkedList<T>::AddLast(T data)
+{
+    shared_ptr<Node> node(new Node(data));
+    if (head == nullptr)
+    {
+        head = node;
+        tail = node;
+    }
+    else
+    {
+        tail->next = node;
+        node->prev = tail;
+        tail = node;
+    }
+}
 
 #pragma endregion
