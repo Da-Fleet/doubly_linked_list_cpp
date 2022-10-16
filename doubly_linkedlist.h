@@ -15,7 +15,7 @@ private:
      *
      * @tparam T
      */
-    struct Node
+    class Node
     {
         T data;
         shared_ptr<Node> next;
@@ -74,9 +74,15 @@ public:
      */
     void RemoveLast(int n);
 
-
-    void print();
-    void printReverse();
+    /**
+     * @brief 
+     * 
+     * @param data 
+     * @return T 
+     */
+    T RemoveData(T data);
+    void Print();
+    void PrintReverse();
     
     #pragma endregion
 };
