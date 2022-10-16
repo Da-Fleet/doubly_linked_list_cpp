@@ -58,7 +58,7 @@ public:
 
 template <typename T>
 LinkedList::LinkedList(T* data) {
-    for_each(data, data + sizeof(data), [&](T& item) {
+    for_each(data.begin(), data.end(), [&](T& item) {
         add(item);
     });
 }
