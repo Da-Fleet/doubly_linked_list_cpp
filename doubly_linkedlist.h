@@ -9,36 +9,76 @@
 template <typename T>
 class LinkedList
 {
-
 private:
     /**
      * @brief Node class
      *
      * @tparam T
      */
-    class Node
+    struct Node
     {
         T data;
-        Node *next;
-        Node *prev;
+        shared_ptr<Node> next;
+        weak_ptr<Node> prev;
     };
 
-    Node *head;
-    Node *tail;
+    shared_ptr<Node> head;
+    shared_ptr<Node> tail;
     int size;
 
 public:
+
+    #pragma region Constructors and Destructor
+    
     /**
      * @brief Construct a new Linked List< T> object
      *
      */
     LinkedList<T>();
-    void insert(T data);
-    void insertAt(int n, T data);
-    void remove(int n);
+
+
+    //Move Semantics
+    /**
+     * @brief Construct a new Linked List< T> object
+     *
+     * @param other
+     */
+    LinkedList<T>(LinkedList<T> &&other);
+
+    #pragma endregion
+
+    #pragma region Getters and Setters
+
+    /**
+     * @brief Get the Size object
+     *
+     * @return int
+     */
+    int getSize();
+
+    #pragma endregion
+
+    #pragma region Public Methods
+    
+    /**
+     * @brief Add a new node to the end of the list
+     *
+     * @param data
+     */
+    void AddLast(T data);
+
+    /**
+     * @brief Removes the last node of the list
+     * 
+     * @param n 
+     */
+    void RemoveLast(int n);
+
+
     void print();
     void printReverse();
-    int getSize();
+    
+    #pragma endregion
 };
 
 #endif

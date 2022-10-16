@@ -1,6 +1,6 @@
-// #include "doubly_linkedlist.h"
+#include "doubly_linkedlist.h"
 
-// Doble linked list with smart pointers
+#pragma region Base doble linked list with smart pointers
 template <typename T>
 class LinkedList {
     struct Node {
@@ -11,6 +11,7 @@ class LinkedList {
     };
     shared_ptr<Node> head;
     shared_ptr<Node> tail;
+    int size;
 
 public:
     LinkedList() {}
@@ -52,7 +53,7 @@ public:
             }
             node = node->next;
         }
-    }
-
-    
+    }    
 };
+
+#pragma endregion
