@@ -92,7 +92,7 @@ public:
      *
      * @return int
      */
-    int getSize();
+    int getSize() noexcept(true);
 
     #pragma endregion
 
@@ -103,14 +103,14 @@ public:
      *
      * @param data
      */
-    void AddLast(T data);
+    void AddLast(T data) noexcept(true);
 
     /**
      * @brief Remove the last node of the list
      * 
      * @return T 
      */
-    T RemoveLast();
+    T RemoveLast() noexcept(*this.head != nullptr);
 
     /**
      * @brief Add a new node at the index position
@@ -118,7 +118,7 @@ public:
      * @param data 
      * @param index 
      */
-    void At(T data, int index);
+    void At(T data, int index) noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief Removes the node at the index position
@@ -126,7 +126,7 @@ public:
      * @param index 
      * @return T 
      */
-    T RemoveAt(int index);
+    T RemoveAt(int index) noexcept(*this.index >=  0 && *this.index < size);
 
     /**
      * @brief 

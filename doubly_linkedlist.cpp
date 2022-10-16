@@ -75,7 +75,7 @@ void LinkedList<T>::AddLast(T data) noexcept(true)
 }
 
 template <class T>
-T LinkedList<T>::RemoveLast() noexcept(head != nullptr)
+T LinkedList<T>::RemoveLast() noexcept(*this.head != nullptr)
 {
     if (head == nullptr)
     {
@@ -99,7 +99,7 @@ T LinkedList<T>::RemoveLast() noexcept(head != nullptr)
 }
 
 template <class T>
-void LinkedList<T>::At(T data, int index) noexcept(index = > 0 && index < size)
+void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {
@@ -117,7 +117,7 @@ void LinkedList<T>::At(T data, int index) noexcept(index = > 0 && index < size)
 }
 
 template <class T>
-T LinkedList<T>::RemoveAt(int index) noexcept(index = > 0 && index < size)
+T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >=  0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {
