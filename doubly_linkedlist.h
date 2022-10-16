@@ -23,9 +23,11 @@ private:
      */
     class Node
     {
-        T data;
-        shared_ptr<Node> next;
-        weak_ptr<Node> prev;
+        public:
+            T data;
+            shared_ptr<Node> next;
+            weak_ptr<Node> prev;
+            Node(T data);
     };
 
     shared_ptr<Node> head;
@@ -36,11 +38,11 @@ public:
 
     #pragma region Constructors and Destructor
     
-    /**
-     * @brief Construct a new Linked List< T> object
-     *
-     */
-    LinkedList();
+    // /**
+    //  * @brief Construct a new Linked List< T> object
+    //  *
+    //  */
+    // LinkedList();
 
     /**
      * @brief This constructor is a special kind of constructor, 
@@ -50,28 +52,28 @@ public:
      */
     LinkedList(initializer_list<T> list);
 
-    /**
-     * @brief Copy constructor
-     *
-     * @param other Other list
-     */
-    LinkedList(const LinkedList<T>& other);
+    // /**
+    //  * @brief Copy constructor
+    //  *
+    //  * @param other Other list
+    //  */
+    // LinkedList(const LinkedList<T>& other);
 
-    /**
-     * @brief Copy assignment operator
-     *
-     * @param other
-     * @return LinkedList<T>&
-     */
-    LinkedList<T>& operator=(const LinkedList<T>& other);
+    // /**
+    //  * @brief Copy assignment operator
+    //  *
+    //  * @param other
+    //  * @return LinkedList<T>&
+    //  */
+    // LinkedList<T>& operator=(const LinkedList<T>& other);
 
-    //Move Semantics
-    /**
-     * @brief Construct a new Linked List< T> object
-     *
-     * @param other
-     */
-    LinkedList(LinkedList<T> &&other);
+    // //Move Semantics
+    // /**
+    //  * @brief Construct a new Linked List< T> object
+    //  *
+    //  * @param other
+    //  */
+    // LinkedList(LinkedList<T> &&other);
 
     #pragma endregion
 
