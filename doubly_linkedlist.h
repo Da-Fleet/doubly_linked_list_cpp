@@ -75,6 +75,14 @@ public:
      */
     LinkedList(LinkedList<T> &&other);
 
+    /**
+     * @brief Move assignment operator
+     * 
+     * @param other 
+     * @return LinkedList<T>& 
+     */
+    LinkedList<T>& operator=(LinkedList<T> &&other);
+
     #pragma endregion
 
     #pragma region Getters and Setters
@@ -98,11 +106,27 @@ public:
     void AddLast(T data);
 
     /**
-     * @brief Removes the last node of the list
+     * @brief Remove the last node of the list
      * 
-     * @param n 
+     * @return T 
      */
-    void RemoveLast(int n);
+    T RemoveLast();
+
+    /**
+     * @brief Add a new node at the index position
+     * 
+     * @param data 
+     * @param index 
+     */
+    void At(T data, int index);
+
+    /**
+     * @brief Removes the node at the index position
+     * 
+     * @param index 
+     * @return T 
+     */
+    T RemoveAt(int index);
 
     /**
      * @brief 
@@ -111,6 +135,7 @@ public:
      * @return T 
      */
     T RemoveData(T data);
+
     void Print();
     void PrintReverse();
     
