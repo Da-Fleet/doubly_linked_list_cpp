@@ -1,8 +1,13 @@
 #include "doubly_linkedlist.h"
 
+using namespace std;
+
+template <class T>
+LinkedList<T>::Node::Node(T data) : data(data) {}
+
 #pragma region Constructors and Destructors Implementations
 
-template <typename T>
+template <class T>
 LinkedList<T>::LinkedList()
 {
     head = nullptr;
@@ -10,36 +15,32 @@ LinkedList<T>::LinkedList()
     size = 0;
 }
 
-// Copy Semantics
-template <typename T>
+template <class T>
+LinkedList<T>::LinkedList(initializer_list<T> list)
+{
+    for (auto it = list.begin(); it != list.end(); it++)
+    {
+        this->AddLast(*it);
+    }
+}
+
+template <class T>
 LinkedList<T>::LinkedList(const LinkedList<T> &other)
 {
-    swap(head, other.head);
-    swap(tail, other.tail);
-    swap(size, other.size);
+    // swap(head, other.head);
+    // swap(tail, other.tail);
+    // swap(size, other.size);
+
+    //TODO: Fix me!!!!
 }
 
-template <typename T>
+template <class T>
 LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
-{
-    swap(*this, other);
-    return *this;
-}
 
-// Move Semantics
-template <typename T>
-LinkedList<T>::LinkedList(LinkedList<T> &&other)
 {
-    swap(head, other.head);
-    swap(tail, other.tail);
-    swap(size, other.size);
-}
-
-template <typename T>
-LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
-{
-    swap(*this, other);
-    return *this;
+    // swap(*this, other);
+    // return *this;
+    //TODO: Fix me!!!!
 }
 
 #pragma endregion
@@ -56,7 +57,7 @@ int LinkedList<T>::getSize() noexcept(true)
 
 #pragma region Public Methods Implementations
 
-template <typename T>
+template <class T>
 void LinkedList<T>::AddLast(T data) noexcept(true)
 {
     shared_ptr<Node> node(new Node(data));
@@ -73,7 +74,7 @@ void LinkedList<T>::AddLast(T data) noexcept(true)
     }
 }
 
-template <typename T>
+template <class T>
 T LinkedList<T>::RemoveLast() noexcept(head != nullptr)
 {
     if (head == nullptr)
@@ -97,7 +98,7 @@ T LinkedList<T>::RemoveLast() noexcept(head != nullptr)
     }
 }
 
-template <typename T>
+template <class T>
 void LinkedList<T>::At(T data, int index) noexcept(index = > 0 && index < size)
 {
     if (index < 0 || index >= size)
@@ -115,7 +116,7 @@ void LinkedList<T>::At(T data, int index) noexcept(index = > 0 && index < size)
     }
 }
 
-template <typename T>
+template <class T>
 T LinkedList<T>::RemoveAt(int index) noexcept(index = > 0 && index < size)
 {
     if (index < 0 || index >= size)
@@ -151,37 +152,7 @@ T LinkedList<T>::RemoveAt(int index) noexcept(index = > 0 && index < size)
     }
 }
 
-template <typename T>
-T LinkedList<T>::RemoveData(T data)
-{
-    shared_ptr<Node> node = head;
-    while (node != nullptr)
-    {
-        if (node->data == data)
-        {
-            if (node->prev.lock() != nullptr)
-            {
-                node->prev.lock()->next = node->next;
-            }
-            else
-            {
-                head = node->next;
-            }
-            if (node->next != nullptr)
-            {
-                node->next->prev = node->prev;
-            }
-            else
-            {
-                tail = node->prev.lock();
-            }
-            break;
-        }
-        node = node->next;
-    }
-}
-
-template <typename T>
+template <class T>
 void LinkedList<T>::Print()
 {
     shared_ptr<Node> node = head;
