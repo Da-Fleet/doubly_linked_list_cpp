@@ -10,6 +10,23 @@ LinkedList<T>::LinkedList()
     size = 0;
 }
 
+//Copy Semantics
+template <typename T>
+LinkedList<T>::LinkedList(const LinkedList<T>& other)
+{
+    using std::swap;
+    swap(head, other.head);
+    swap(tail, other.tail);
+    swap(size, other.size);
+}
+
+template <typename T>
+LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& other)
+{
+    swap(*this, other);
+    return *this;
+}
+
 #pragma endregion
 
 #pragma region Getters and Setters Implementations

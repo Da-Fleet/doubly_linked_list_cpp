@@ -36,6 +36,22 @@ public:
      */
     LinkedList<T>();
 
+    //Copy Semmantics
+
+    /**
+     * @brief Copy constructor
+     *
+     * @param other
+     */
+    LinkedList<T>(const LinkedList<T>& other);
+
+    /**
+     * @brief Copy assignment operator
+     *
+     * @param other
+     * @return LinkedList<T>&
+     */
+    LinkedList<T>& operator=(const LinkedList<T>& other);
 
     //Move Semantics
     /**
