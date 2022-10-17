@@ -12,23 +12,6 @@ Node<T>::Node(T data) : data(data)
 }
 
 template <class T>
-Node<T>::Node(const Node<T> &other)
-{
-    cout<<"Node copy constructor called"<<endl;
-    swap(data, other.data);
-    swap(next, other.next);
-    swap(prev, other.prev);
-}
-
-template <class T>
-Node<T> &Node<T>::operator=(const Node<T> &other)
-{
-    cout<<"Node copy assignment operator called"<<endl;
-    swap(*this, other);
-    return *this;
-}
-
-template <class T>
 Node<T>::Node(Node<T> &&other)
 {
     cout<<"Node move constructor called"<<endl;
@@ -62,25 +45,6 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
     }
 }
 
-template <class T>
-LinkedList<T>::LinkedList(const LinkedList<T> &other)
-{
-    swap(head, other.head);
-    swap(tail, other.tail);
-    // swap(size, other.size);
-
-    size = other.size;
-
-    // TODO: Fix me!!!!
-}
-
-template <class T>
-LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
-{
-    swap(*this, other);
-    return *this;
-}
-
 // Move Semantics
 template <typename T>
 LinkedList<T>::LinkedList(LinkedList<T> &&other)
@@ -93,8 +57,17 @@ LinkedList<T>::LinkedList(LinkedList<T> &&other)
 template <class T>
 LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
 {
-    cout << "Move assignment operator called" << endl;
-    swap(*this, other);
+    cout<<"Move assignment operator called without swap"<<endl;
+    //checking if the object is not being assigned to itself
+    if (this != &other)
+    {
+        head = other.head;
+        tail = other.tail;
+        size = other.size;
+        other.head = nullptr;
+        other.tail = nullptr;
+        other.size = 0;
+    }
     return *this;
 }
 
@@ -143,10 +116,12 @@ void LinkedList<T>::AddLast(T data) noexcept(true)
         node->prev = tail;
         tail = node;
     }
+
+    size++;
 }
 
 template <class T>
-T LinkedList<T>::RemoveLast() noexcept(*this.head != nullptr)
+T LinkedList<T>::RemoveLast() //noexcept(head != nullptr)
 {
     if (head == nullptr)
     {
@@ -170,7 +145,7 @@ T LinkedList<T>::RemoveLast() noexcept(*this.head != nullptr)
 }
 
 template <class T>
-void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.index < size)
+void LinkedList<T>::At(T data, int index) //noexcept(*this.index >= 0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {
@@ -184,11 +159,12 @@ void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.ind
             node = node->next;
         }
         node->data = data;
+        size++;
     }
 }
 
 template <class T>
-T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < size)
+T LinkedList<T>::RemoveAt(int index) //znoexcept(*this.index >= 0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {

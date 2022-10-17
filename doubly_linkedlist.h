@@ -74,6 +74,14 @@ public:
 #pragma region Constructors and Destructor
 
     /**
+     * @brief Construct a new Linked List object 
+     * and use a lambda function to initialize the list
+     * 
+     * @param data 
+     */
+    LinkedList(vector<T> data);
+
+    /**
      * @brief Construct a new Linked List< T> object
      *
      */
@@ -86,33 +94,6 @@ public:
      * @param list The list to initialize
      */
     LinkedList(initializer_list<T> list);
-
-#pragma region Copy Semantics
-
-    /**
-     * @brief Construct a new Linked List object
-     * and use a lambda function to initialize the list
-     *
-     * @param data
-     */
-    LinkedList(vector<T> data);
-
-    /**
-     * @brief Copy constructor
-     *
-     * @param other Other list
-     */
-    LinkedList(const LinkedList<T> &other);
-
-    /**
-     * @brief Copy assignment operator
-     *
-     * @param other
-     * @return LinkedList<T>&
-     */
-    LinkedList<T> &operator=(const LinkedList<T> &other);
-
-#pragma endregion
 
 #pragma region Move Semantics
 
@@ -166,7 +147,7 @@ public:
      *
      * @return T
      */
-    T RemoveLast() noexcept(*this.head != nullptr);
+    T RemoveLast(); //noexcept(head != nullptr);
 
     /**
      * @brief Add a new node at the index position
@@ -174,7 +155,7 @@ public:
      * @param data
      * @param index
      */
-    void At(T data, int index) noexcept(*this.index >= 0 && *this.index < size);
+    void At(T data, int index); //noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief Removes the node at the index position
@@ -182,7 +163,7 @@ public:
      * @param index
      * @return T
      */
-    T RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < size);
+    T RemoveAt(int index); //noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief
