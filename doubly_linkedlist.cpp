@@ -48,7 +48,6 @@ Node<T> &Node<T>::operator=(Node<T> &&other)
 template <class T>
 LinkedList<T>::LinkedList()
 {
-    cout<<"LL default constructor called"<<endl;
     head = nullptr;
     tail = nullptr;
     size = 0;
@@ -66,7 +65,6 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
 template <class T>
 LinkedList<T>::LinkedList(const LinkedList<T> &other)
 {
-    cout<<"LL copy constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     // swap(size, other.size);
@@ -79,7 +77,6 @@ LinkedList<T>::LinkedList(const LinkedList<T> &other)
 template <class T>
 LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
 {
-    cout<<"LL copy assignment operator called"<<endl;
     swap(*this, other);
     return *this;
 }
@@ -88,7 +85,6 @@ LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
 template <typename T>
 LinkedList<T>::LinkedList(LinkedList<T> &&other)
 {
-    cout<<"LL move constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     swap(size, other.size);
@@ -97,7 +93,7 @@ LinkedList<T>::LinkedList(LinkedList<T> &&other)
 template <class T>
 LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
 {
-    cout<<"Move assignment operator called"<<endl;
+    cout << "Move assignment operator called" << endl;
     swap(*this, other);
     return *this;
 }
@@ -105,14 +101,15 @@ LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
 #pragma region ctor and dtor
 
 template <class T>
-LinkedList<T>::LinkedList(vector<T> data) {
-    for_each(data.begin(), data.end(), [&](T& item) {
-        this->AddLast(item);
-    });
+LinkedList<T>::LinkedList(vector<T> data)
+{
+    for_each(data.begin(), data.end(), [&](T &item)
+             { this->AddLast(item); });
 }
 
 template <class T>
-LinkedList<T>::~LinkedList() {
+LinkedList<T>::~LinkedList()
+{
     head = nullptr;
     tail = nullptr;
     size = 0;
@@ -225,6 +222,28 @@ T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < 
         return data;
     }
 }
+
+template<class T> template<class R> 
+LinkedList<R> LinkedList<T>::Map(R (*transformer)(T)) //noexcept(true)
+{
+    LinkedList<R> result;
+    shared_ptr<Node<T>> node = head;
+    while (node != nullptr)
+    {
+        result.AddLast(transformer(node->data));
+        node = node->next;
+    }
+    return result;
+}
+
+// template<class T, class R> 
+// LinkedList<R> LambdaFunction::Map(R (*)(T))  //noexcept(true)
+// {
+//     LinkedList<R> result;
+//     for_each(begin(), end(), [&](T &item)
+//              { result.AddLast(transformer(item)); });
+//     return result;
+// }
 
 template <class T>
 void LinkedList<T>::Print()

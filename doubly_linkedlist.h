@@ -90,13 +90,12 @@ public:
 #pragma region Copy Semantics
 
     /**
-     * @brief Construct a new Linked List object 
+     * @brief Construct a new Linked List object
      * and use a lambda function to initialize the list
-     * 
-     * @param data 
+     *
+     * @param data
      */
     LinkedList(vector<T> data);
-
 
     /**
      * @brief Copy constructor
@@ -134,11 +133,11 @@ public:
 
     /**
      * @brief Destroy the Linked List object
-     * 
+     *
      */
     ~LinkedList();
 
-    #pragma endregion
+#pragma endregion
 
 #pragma endregion
 
@@ -192,6 +191,15 @@ public:
      * @return T
      */
     T RemoveData(T data);
+
+    /**
+     * @brief
+     *
+     * @param transformer
+     * @return A transformed Linked List
+     */
+    template <class R>
+    LinkedList<R> Map(R (*transformer)(T));
 
     void Print();
     void PrintReverse();
