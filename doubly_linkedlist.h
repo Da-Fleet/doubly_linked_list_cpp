@@ -55,10 +55,10 @@ public:
 #pragma region Constructors and Destructor
 
     /**
-     * @brief Construct a new Linked List object 
+     * @brief Construct a new Linked List object
      * and use a lambda function to initialize the list
-     * 
-     * @param data 
+     *
+     * @param data
      */
     LinkedList(vector<T> data);
 
@@ -110,7 +110,7 @@ public:
      *
      * @return int
      */
-    int getSize() noexcept(true);
+    int length() noexcept(true);
 
 #pragma endregion
 
@@ -128,7 +128,7 @@ public:
      *
      * @return T
      */
-    T RemoveLast(); //noexcept(head != nullptr);
+    T RemoveLast(); // noexcept(head != nullptr);
 
     /**
      * @brief Add a new node at the index position
@@ -136,7 +136,7 @@ public:
      * @param data
      * @param index
      */
-    void At(T data, int index); //noexcept(*this.index >= 0 && *this.index < size);
+    void At(T data, int index); // noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief Removes the node at the index position
@@ -144,18 +144,7 @@ public:
      * @param index
      * @return T
      */
-    T RemoveAt(int index); //noexcept(*this.index >= 0 && *this.index < size);
-
-    /**
-     * @brief
-     *
-     * @param data
-     * @return T
-     */
-    T RemoveData(T data);
-
-    void InsertAt(T data, int index); //noexcept(*this.index >= 0 && *this.index < size)
-
+    T RemoveAt(int index); // noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief
@@ -166,7 +155,16 @@ public:
     template <class R>
     LinkedList<R> Map(R (*transformer)(T));
 
+    /**
+     * @brief Print the list
+     * 
+     */
     void Print();
+
+    /**
+     * @brief Print the inverse of the list
+     * 
+     */
     void PrintReverse();
 
 #pragma endregion
