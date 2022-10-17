@@ -5,7 +5,39 @@ using namespace std;
 #pragma region Constructors and Destructors Implementations
 
 template <class T>
-Node<T>::Node(T data) : data(data) {}
+Node<T>::Node(T data) : data(data)
+{
+}
+
+template <class T>
+Node<T>::Node(const Node<T> &other)
+{
+    swap(data, other.data);
+    swap(next, other.next);
+    swap(prev, other.prev);
+}
+
+template <class T>
+Node<T> &Node<T>::operator=(const Node<T> &other)
+{
+    swap(*this, other);
+    return *this;
+}
+
+template <class T>
+Node<T>::Node(Node<T> &&other)
+{
+    swap(data, other.data);
+    swap(next, other.next);
+    swap(prev, other.prev);
+}
+
+template <class T>
+Node<T> &Node<T>::operator=(Node<T> &&other)
+{
+    swap(*this, other);
+    return *this;
+}
 
 template <class T>
 LinkedList<T>::LinkedList()
@@ -27,20 +59,36 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
 template <class T>
 LinkedList<T>::LinkedList(const LinkedList<T> &other)
 {
-    // swap(head, other.head);
-    // swap(tail, other.tail);
+    swap(head, other.head);
+    swap(tail, other.tail);
     // swap(size, other.size);
 
-    //TODO: Fix me!!!!
+    size = other.size;
+
+    // TODO: Fix me!!!!
+}
+
+template <class T>
+LinkedList<T>::LinkedList(LinkedList<T> &&other)
+{
+    swap(head, other.head);
+    swap(tail, other.tail);
+    swap(size, other.size);
 }
 
 template <class T>
 LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
-
 {
-    // swap(*this, other);
-    // return *this;
-    //TODO: Fix me!!!!
+    swap(*this, other);
+    return *this;
+    // TODO: Fix me!!!!
+}
+
+template <class T>
+LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
+{
+    swap(*this, other);
+    return *this;
 }
 
 #pragma region ctor and dtor
@@ -130,7 +178,7 @@ void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.ind
 }
 
 template <class T>
-T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >=  0 && *this.index < size)
+T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {
