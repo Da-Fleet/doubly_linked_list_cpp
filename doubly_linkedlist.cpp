@@ -76,6 +76,7 @@ LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
 template <class T>
 LinkedList<T>::LinkedList(vector<T> data)
 {
+    size = 0;
     for_each(data.begin(), data.end(), [&](T &item)
              { this->AddLast(item); });
 }
@@ -116,8 +117,9 @@ void LinkedList<T>::AddLast(T data) noexcept(true)
         node->prev = tail;
         tail = node;
     }
-
     size++;
+    // cout<< data <<endl;
+    // cout<< size <<endl;
 }
 
 template <class T>
@@ -158,7 +160,10 @@ void LinkedList<T>::At(T data, int index) //noexcept(*this.index >= 0 && *this.i
         {
             node = node->next;
         }
-        node->data = data;
+        Node<T> newNode(data);
+        newNode->prev = move(node->prev);
+        newNode->next = move(node);
+        node->prev = move(newNode);
         size++;
     }
 }
@@ -211,15 +216,6 @@ LinkedList<R> LinkedList<T>::Map(R (*transformer)(T)) //noexcept(true)
     }
     return result;
 }
-
-// template<class T, class R> 
-// LinkedList<R> LambdaFunction::Map(R (*)(T))  //noexcept(true)
-// {
-//     LinkedList<R> result;
-//     for_each(begin(), end(), [&](T &item)
-//              { result.AddLast(transformer(item)); });
-//     return result;
-// }
 
 template <class T>
 void LinkedList<T>::Print()

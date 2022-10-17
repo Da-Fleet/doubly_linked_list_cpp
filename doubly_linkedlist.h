@@ -173,6 +173,9 @@ public:
      */
     T RemoveData(T data);
 
+    void InsertAt(T data, int index); //noexcept(*this.index >= 0 && *this.index < size)
+
+
     /**
      * @brief
      *
