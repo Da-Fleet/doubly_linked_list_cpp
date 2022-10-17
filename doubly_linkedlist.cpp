@@ -43,6 +43,7 @@ Node<T> &Node<T>::operator=(Node<T> &&other)
 template <class T>
 LinkedList<T>::LinkedList()
 {
+    cout<<"Default constructor called"<<endl;
     head = nullptr;
     tail = nullptr;
     size = 0;
@@ -60,6 +61,7 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
 template <class T>
 LinkedList<T>::LinkedList(const LinkedList<T> &other)
 {
+    cout<<"Copy constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     // swap(size, other.size);
@@ -70,24 +72,27 @@ LinkedList<T>::LinkedList(const LinkedList<T> &other)
 }
 
 template <class T>
+LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
+{
+    cout<<"Copy assignment operator called"<<endl;
+    swap(*this, other);
+    return *this;
+}
+
+// Move Semantics
+template <typename T>
 LinkedList<T>::LinkedList(LinkedList<T> &&other)
 {
+    cout<<"Move constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     swap(size, other.size);
 }
 
 template <class T>
-LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
-{
-    swap(*this, other);
-    return *this;
-    // TODO: Fix me!!!!
-}
-
-template <class T>
 LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
 {
+    cout<<"Move assignment operator called"<<endl;
     swap(*this, other);
     return *this;
 }
