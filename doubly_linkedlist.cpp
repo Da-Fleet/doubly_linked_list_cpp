@@ -8,11 +8,13 @@ using namespace std;
 template <class T>
 Node<T>::Node(T data) : data(data)
 {
+    cout<<"Node constructor called"<<endl;
 }
 
 template <class T>
 Node<T>::Node(const Node<T> &other)
 {
+    cout<<"Node copy constructor called"<<endl;
     swap(data, other.data);
     swap(next, other.next);
     swap(prev, other.prev);
@@ -21,6 +23,7 @@ Node<T>::Node(const Node<T> &other)
 template <class T>
 Node<T> &Node<T>::operator=(const Node<T> &other)
 {
+    cout<<"Node copy assignment operator called"<<endl;
     swap(*this, other);
     return *this;
 }
@@ -28,6 +31,7 @@ Node<T> &Node<T>::operator=(const Node<T> &other)
 template <class T>
 Node<T>::Node(Node<T> &&other)
 {
+    cout<<"Node move constructor called"<<endl;
     swap(data, other.data);
     swap(next, other.next);
     swap(prev, other.prev);
@@ -36,6 +40,7 @@ Node<T>::Node(Node<T> &&other)
 template <class T>
 Node<T> &Node<T>::operator=(Node<T> &&other)
 {
+    cout<<"Node move assignment operator called"<<endl;
     swap(*this, other);
     return *this;
 }
@@ -43,7 +48,7 @@ Node<T> &Node<T>::operator=(Node<T> &&other)
 template <class T>
 LinkedList<T>::LinkedList()
 {
-    cout<<"Default constructor called"<<endl;
+    cout<<"LL default constructor called"<<endl;
     head = nullptr;
     tail = nullptr;
     size = 0;
@@ -61,7 +66,7 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
 template <class T>
 LinkedList<T>::LinkedList(const LinkedList<T> &other)
 {
-    cout<<"Copy constructor called"<<endl;
+    cout<<"LL copy constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     // swap(size, other.size);
@@ -74,7 +79,7 @@ LinkedList<T>::LinkedList(const LinkedList<T> &other)
 template <class T>
 LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
 {
-    cout<<"Copy assignment operator called"<<endl;
+    cout<<"LL copy assignment operator called"<<endl;
     swap(*this, other);
     return *this;
 }
@@ -83,7 +88,7 @@ LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
 template <typename T>
 LinkedList<T>::LinkedList(LinkedList<T> &&other)
 {
-    cout<<"Move constructor called"<<endl;
+    cout<<"LL move constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     swap(size, other.size);
