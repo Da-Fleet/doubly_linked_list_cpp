@@ -3,10 +3,42 @@
 
 using namespace std;
 
-template <class T>
-LinkedList<T>::Node::Node(T data) : data(data) {}
-
 #pragma region Constructors and Destructors Implementations
+
+template <class T>
+Node<T>::Node(T data) : data(data)
+{
+}
+
+template <class T>
+Node<T>::Node(const Node<T> &other)
+{
+    swap(data, other.data);
+    swap(next, other.next);
+    swap(prev, other.prev);
+}
+
+template <class T>
+Node<T> &Node<T>::operator=(const Node<T> &other)
+{
+    swap(*this, other);
+    return *this;
+}
+
+template <class T>
+Node<T>::Node(Node<T> &&other)
+{
+    swap(data, other.data);
+    swap(next, other.next);
+    swap(prev, other.prev);
+}
+
+template <class T>
+Node<T> &Node<T>::operator=(Node<T> &&other)
+{
+    swap(*this, other);
+    return *this;
+}
 
 template <class T>
 LinkedList<T>::LinkedList()
@@ -28,20 +60,36 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
 template <class T>
 LinkedList<T>::LinkedList(const LinkedList<T> &other)
 {
-    // swap(head, other.head);
-    // swap(tail, other.tail);
+    swap(head, other.head);
+    swap(tail, other.tail);
     // swap(size, other.size);
 
-    //TODO: Fix me!!!!
+    size = other.size;
+
+    // TODO: Fix me!!!!
+}
+
+template <class T>
+LinkedList<T>::LinkedList(LinkedList<T> &&other)
+{
+    swap(head, other.head);
+    swap(tail, other.tail);
+    swap(size, other.size);
 }
 
 template <class T>
 LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
-
 {
-    // swap(*this, other);
-    // return *this;
-    //TODO: Fix me!!!!
+    swap(*this, other);
+    return *this;
+    // TODO: Fix me!!!!
+}
+
+template <class T>
+LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
+{
+    swap(*this, other);
+    return *this;
 }
 
 #pragma region ctor and dtor
@@ -76,7 +124,7 @@ int LinkedList<T>::getSize() noexcept(true)
 template <class T>
 void LinkedList<T>::AddLast(T data) noexcept(true)
 {
-    shared_ptr<Node> node(new Node(data));
+    shared_ptr<Node<T>> node(new Node<T>(data));
     if (head == nullptr)
     {
         head = node;
@@ -123,7 +171,7 @@ void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.ind
     }
     else
     {
-        shared_ptr<Node> node = head;
+        shared_ptr<Node<T>> node = head;
         for (int i = 0; i < index; i++)
         {
             node = node->next;
@@ -133,7 +181,7 @@ void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.ind
 }
 
 template <class T>
-T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >=  0 && *this.index < size)
+T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {
@@ -141,7 +189,7 @@ T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >=  0 && *this.index <
     }
     else
     {
-        shared_ptr<Node> node = head;
+        shared_ptr<Node<T>> node = head;
         for (int i = 0; i < index; i++)
         {
             node = node->next;
@@ -171,7 +219,7 @@ T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >=  0 && *this.index <
 template <class T>
 void LinkedList<T>::Print()
 {
-    shared_ptr<Node> node = head;
+    shared_ptr<Node<T>> node = head;
     while (node != nullptr)
     {
         cout << node->data << " ";

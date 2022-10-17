@@ -8,37 +8,71 @@
 
 using namespace std;
 
-/**
- * @brief Doubly linked list
- *
- * @tparam T Generic type
- */
+template <class T>
+class Node
+{
+public:
+    T data;
+    shared_ptr<Node<T>> next;
+    weak_ptr<Node<T>> prev;
+
+    /**
+     * @brief Construct a new Node object
+     *
+     * @param data
+     */
+    Node(T data);
+
+#pragma region Copy Semantics
+
+    /**
+     * @brief Copy constructor
+     *
+     * @param other
+     */
+    Node(const Node<T> &other);
+
+    /**
+     * @brief Copy assignment operator
+     *
+     * @param other
+     * @return Node<T>&
+     */
+    Node &operator=(const Node<T> &other);
+
+#pragma endregion
+
+#pragma region Move Semantics
+
+    /**
+     * @brief Move Constructor
+     *
+     * @param other
+     */
+    Node(Node<T> &&other);
+
+    /**
+     * @brief Move Asignment Operator
+     *
+     * @param other
+     * @return Node<T>&
+     */
+    Node &operator=(Node<T> &&other);
+
+#pragma endregion
+};
+
 template <class T>
 class LinkedList
 {
 private:
-    /**
-     * @brief Node class
-     *
-     * @tparam T
-     */
-    class Node
-    {
-        public:
-            T data;
-            shared_ptr<Node> next;
-            weak_ptr<Node> prev;
-            Node(T data);
-    };
-
-    shared_ptr<Node> head;
-    shared_ptr<Node> tail;
+    shared_ptr<Node<T>> head;
+    shared_ptr<Node<T>> tail;
     int size;
 
 public:
+#pragma region Constructors and Destructor
 
-    #pragma region Constructors and Destructor
-    
     /**
      * @brief Construct a new Linked List< T> object
      *
@@ -46,12 +80,14 @@ public:
     LinkedList();
 
     /**
-     * @brief This constructor is a special kind of constructor, 
+     * @brief This constructor is a special kind of constructor,
      * called an initializer-list-constructor
-     * 
+     *
      * @param list The list to initialize
      */
     LinkedList(initializer_list<T> list);
+
+#pragma region Copy Semantics
 
     /**
      * @brief Construct a new Linked List object 
@@ -67,7 +103,7 @@ public:
      *
      * @param other Other list
      */
-    LinkedList(const LinkedList<T>& other);
+    LinkedList(const LinkedList<T> &other);
 
     /**
      * @brief Copy assignment operator
@@ -75,11 +111,14 @@ public:
      * @param other
      * @return LinkedList<T>&
      */
-    LinkedList<T>& operator=(const LinkedList<T>& other);
+    LinkedList<T> &operator=(const LinkedList<T> &other);
 
-    //Move Semantics
+#pragma endregion
+
+#pragma region Move Semantics
+
     /**
-     * @brief Construct a new Linked List< T> object
+     * @brief Move Constructor
      *
      * @param other
      */
@@ -87,11 +126,11 @@ public:
 
     /**
      * @brief Move assignment operator
-     * 
-     * @param other 
-     * @return LinkedList<T>& 
+     *
+     * @param other
+     * @return LinkedList<T>&
      */
-    LinkedList<T>& operator=(LinkedList<T> &&other);
+    LinkedList<T> &operator=(LinkedList<T> &&other);
 
     /**
      * @brief Destroy the Linked List object
@@ -101,7 +140,9 @@ public:
 
     #pragma endregion
 
-    #pragma region Getters and Setters
+#pragma endregion
+
+#pragma region Getters and Setters
 
     /**
      * @brief Get the Size object
@@ -110,10 +151,10 @@ public:
      */
     int getSize() noexcept(true);
 
-    #pragma endregion
+#pragma endregion
 
-    #pragma region Public Methods
-    
+#pragma region Public Methods
+
     /**
      * @brief Add a new node to the end of the list
      *
@@ -123,39 +164,39 @@ public:
 
     /**
      * @brief Remove the last node of the list
-     * 
-     * @return T 
+     *
+     * @return T
      */
     T RemoveLast() noexcept(*this.head != nullptr);
 
     /**
      * @brief Add a new node at the index position
-     * 
-     * @param data 
-     * @param index 
+     *
+     * @param data
+     * @param index
      */
     void At(T data, int index) noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief Removes the node at the index position
-     * 
-     * @param index 
-     * @return T 
+     *
+     * @param index
+     * @return T
      */
-    T RemoveAt(int index) noexcept(*this.index >=  0 && *this.index < size);
+    T RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < size);
 
     /**
-     * @brief 
-     * 
-     * @param data 
-     * @return T 
+     * @brief
+     *
+     * @param data
+     * @return T
      */
     T RemoveData(T data);
 
     void Print();
     void PrintReverse();
-    
-    #pragma endregion
+
+#pragma endregion
 };
 
 #endif
