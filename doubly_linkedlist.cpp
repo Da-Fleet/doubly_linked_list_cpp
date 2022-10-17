@@ -2,10 +2,10 @@
 
 using namespace std;
 
-template <class T>
-LinkedList<T>::Node::Node(T data) : data(data) {}
-
 #pragma region Constructors and Destructors Implementations
+
+template <class T>
+Node<T>::Node(T data) : data(data) {}
 
 template <class T>
 LinkedList<T>::LinkedList()
@@ -60,7 +60,7 @@ int LinkedList<T>::getSize() noexcept(true)
 template <class T>
 void LinkedList<T>::AddLast(T data) noexcept(true)
 {
-    shared_ptr<Node> node(new Node(data));
+    shared_ptr<Node<T>> node(new Node<T>(data));
     if (head == nullptr)
     {
         head = node;
@@ -107,7 +107,7 @@ void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.ind
     }
     else
     {
-        shared_ptr<Node> node = head;
+        shared_ptr<Node<T>> node = head;
         for (int i = 0; i < index; i++)
         {
             node = node->next;
@@ -125,7 +125,7 @@ T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >=  0 && *this.index <
     }
     else
     {
-        shared_ptr<Node> node = head;
+        shared_ptr<Node<T>> node = head;
         for (int i = 0; i < index; i++)
         {
             node = node->next;
@@ -155,7 +155,7 @@ T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >=  0 && *this.index <
 template <class T>
 void LinkedList<T>::Print()
 {
-    shared_ptr<Node> node = head;
+    shared_ptr<Node<T>> node = head;
     while (node != nullptr)
     {
         cout << node->data << " ";
