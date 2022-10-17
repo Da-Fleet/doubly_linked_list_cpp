@@ -1,4 +1,5 @@
 #include "doubly_linkedlist.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -44,14 +45,16 @@ LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
 }
 
 #pragma region ctor and dtor
-template <typename T>
-LinkedList::LinkedList(T* data) {
+
+template <class T>
+LinkedList<T>::LinkedList(vector<T> data) {
     for_each(data.begin(), data.end(), [&](T& item) {
-        add(item);
+        this->AddLast(item);
     });
 }
 
-LinkedList::~LinkedList() {
+template <class T>
+LinkedList<T>::~LinkedList() {
     head = nullptr;
     tail = nullptr;
     size = 0;

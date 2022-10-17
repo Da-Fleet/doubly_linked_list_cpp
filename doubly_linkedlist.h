@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <memory>
+#include <vector>
 #include <iostream>
 
 using namespace std;
@@ -53,6 +54,15 @@ public:
     LinkedList(initializer_list<T> list);
 
     /**
+     * @brief Construct a new Linked List object 
+     * and use a lambda function to initialize the list
+     * 
+     * @param data 
+     */
+    LinkedList(vector<T> data);
+
+
+    /**
      * @brief Copy constructor
      *
      * @param other Other list
@@ -82,6 +92,12 @@ public:
      * @return LinkedList<T>& 
      */
     LinkedList<T>& operator=(LinkedList<T> &&other);
+
+    /**
+     * @brief Destroy the Linked List object
+     * 
+     */
+    ~LinkedList();
 
     #pragma endregion
 
