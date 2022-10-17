@@ -24,7 +24,16 @@ template <class T>
 Node<T> &Node<T>::operator=(Node<T> &&other)
 {
     cout<<"Node move assignment operator called"<<endl;
-    swap(*this, other);
+    //checking for self assignment
+    if (this != &other)
+    {
+        data = other.data;
+        next = other.next;
+        prev = other.prev;
+        other.data = T();
+        other.next = shared_ptr<Node<T>>();
+        other.prev = shared_ptr<Node<T>>();
+    }
     return *this;
 }
 
