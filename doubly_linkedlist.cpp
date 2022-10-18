@@ -29,8 +29,8 @@ Node<T> &Node<T>::operator=(Node<T> &&other)
         next = other.next;
         prev = other.prev;
         other.data = T();
-        other.next = shared_ptr<Node<T>>();
-        other.prev = shared_ptr<Node<T>>();
+        other.next = shared();
+        other.prev = shared();
     }
     return *this;
 }
@@ -112,7 +112,7 @@ int LinkedList<T>::length() noexcept(true)
 template <class T>
 void LinkedList<T>::AddLast(T data) noexcept(true)
 {
-    shared_ptr<Node<T>> node(new Node<T>(data));
+    shared node(new Node<T>(data));
     if (head == nullptr)
     {
         head = node;
@@ -160,12 +160,12 @@ void LinkedList<T>::At(T data, int index) // noexcept(*this.index >= 0 && *this.
     }
     else
     {
-        shared_ptr<Node<T>> node = head;
+        shared node = head;
         for (int i = 0; i < index; i++)
         {
             node = node->next;
         }
-        shared_ptr<Node<T>> newNode(new Node<T>(data));
+        shared newNode(new Node<T>(data));
         if (index == 0)
         {
             if (size != 0)
@@ -200,7 +200,7 @@ T LinkedList<T>::RemoveAt(int index) // znoexcept(*this.index >= 0 && *this.inde
     }
     else
     {
-        shared_ptr<Node<T>> node = head;
+        shared node = head;
         for (int i = 0; i < index; i++)
         {
             node = node->next;
@@ -232,7 +232,7 @@ template <class R>
 LinkedList<R> LinkedList<T>::Map(Func<R, T> map) // noexcept(true)
 {
     LinkedList<R> result;
-    shared_ptr<Node<T>> node = head;
+    shared node = head;
     while (node != nullptr)
     {
         result.AddLast(transformer(node->data));
@@ -244,7 +244,7 @@ LinkedList<R> LinkedList<T>::Map(Func<R, T> map) // noexcept(true)
 template <class T>
 void LinkedList<T>::Print()
 {
-    shared_ptr<Node<T>> node = head;
+    shared node = head;
     while (node != nullptr)
     {
         cout << node->data << " ";
@@ -256,7 +256,7 @@ void LinkedList<T>::Print()
 template <class T>
 void LinkedList<T>::PrintReverse()
 {
-    shared_ptr<Node<T>> node = tail;
+    shared node = tail;
     while (node != nullptr)
     {
         cout << node->data << " ";

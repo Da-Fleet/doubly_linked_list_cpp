@@ -19,10 +19,12 @@ using Func = R (*)(T...);
 template <class T>
 class Node
 {
+    using weak = weak_ptr<Node<T>>;
+    using shared = shared_ptr<Node<T>>;
 public:
     T data;
-    shared_ptr<Node<T>> next;
-    weak_ptr<Node<T>> prev;
+    shared next;
+    weak prev;
 
     /**
      * @brief Construct a new Node object
@@ -54,9 +56,11 @@ public:
 template <class T>
 class LinkedList
 {
+    using weak = weak_ptr<Node<T>>;
+    using shared = shared_ptr<Node<T>>;
 private:
-    shared_ptr<Node<T>> head;
-    shared_ptr<Node<T>> tail;
+    shared head;
+    shared tail;
     int size;
 
 public:
