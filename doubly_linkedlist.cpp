@@ -1,283 +1,268 @@
-// Creating a doubly linked list in C++
+#include "doubly_linkedlist.h"
+#include <algorithm>
+
+using namespace std;
+
+#pragma region Constructors and Destructors Implementations
 
 template <class T>
-class Node{
-private:
-    T data;
-    Node<T> *next;
-    Node<T> *prev;
-    
-public:
-    Node(T data){
-        this->data = data;
-        this->next = NULL;
-        this->prev = NULL;
-    }
-    T getData(){
-        return this->data;
-    }
-    void setData(T data){
-        this->data = data;
-    }
-    Node<T>* getNext(){
-        return this->next;
-    }
-    void setNext(Node<T> *next){
-        this->next = next;
-    }
-    Node<T>* getPrev(){
-        return this->prev;
-    }
-    void setPrev(Node<T> *prev){
-        this->prev = prev;
-    }
-};
-
-template <class T>
-class Doubly_linkedlist
+Node<T>::Node(T data) : data(data)
 {
-private:
-    Node<int> *head;
-    Node<int> *tail;
-    int size;
-public:
+    
+}
 
-#pragma region Add Methods
-    void Insert(T data){
-        Node<T> *newNode = new Node<T>(data);
-        if(head == NULL){
-            head = newNode;
-            tail = newNode;
-        }
-        else{
-            tail->setNext(newNode);
-            newNode->setPrev(tail);
-            tail = newNode;
-        }
-        size++;
+template <class T>
+Node<T>::Node(Node<T> &&other)
+{
+    swap(data, other.data);
+    swap(next, other.next);
+    swap(prev, other.prev);
+}
+
+template <class T>
+Node<T> &Node<T>::operator=(Node<T> &&other)
+{
+    // checking for self assignment
+    if (this != &other)
+    {
+        data = other.data;
+        next = other.next;
+        prev = other.prev;
+        other.data = T();
+        other.next = shared();
+        other.prev = shared();
     }
-    
-    void InsertAt(int n, T data){
-        Node<T> *newNode = new Node<T>(data);
-        if(n > size){
-            cout << "Invalid Index" << endl;
-            return;
-        }
-        if(n == 0){
-            newNode->setNext(head);
-            head->setPrev(newNode);
-            head = newNode;
-        }
-        else if(n == size){
-            tail->setNext(newNode);
-            newNode->setPrev(tail);
-            tail = newNode;
-        }
-        else{
-            Node<T> *temp = head;
-            for(int i = 0; i < n-1; i++){
-                temp = temp->getNext();
-            }
-            newNode->setNext(temp->getNext());
-            temp->getNext()->setPrev(newNode);
-            temp->setNext(newNode);
-            newNode->setPrev(temp);
-        }
-        size++;
+    return *this;
+}
+
+template <class T>
+LinkedList<T>::LinkedList()
+{
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+}
+
+template <class T>
+LinkedList<T>::LinkedList(initializer_list<T> list)
+{
+    size = 0;
+    for (auto it = list.begin(); it != list.end(); it++)
+    {
+        this->AddLast(*it);
     }
-  
-    void Push(T data){
-        Node<T> *newNode = new Node<T>(data);
-        if(head == NULL){
-            head = newNode;
-            tail = newNode;
-        }
-        else{
-            head->setPrev(newNode);
-            newNode->setNext(head);
-            head = newNode;
-        }
-        size++;
+}
+
+// Move Semantics
+template <typename T>
+LinkedList<T>::LinkedList(LinkedList<T> &&other)
+{
+    swap(head, other.head);
+    swap(tail, other.tail);
+    swap(size, other.size);
+}
+
+template <class T>
+LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
+{
+    // checking if the object is not being assigned to itself
+    if (this != &other)
+    {
+        head = other.head;
+        tail = other.tail;
+        size = other.size;
+        other.head = nullptr;
+        other.tail = nullptr;
+        other.size = 0;
     }
-    
-    void Enqueue(T data){
-    Node<T> *newNode = new Node<T>(data);
-        if(head == NULL){
-            head = newNode;
-            tail = newNode;
-        }
-        else{
-            tail->setNext(newNode);
-            newNode->setPrev(tail);
-            tail = newNode;
-        }
-        size++;
-    
-    }
+    return *this;
+}
+
+#pragma region ctor and dtor
+
+template <class T>
+LinkedList<T>::LinkedList(vector<T> data)
+{
+    size = 0;
+    for_each(data.begin(), data.end(), [&](T &item)
+             { this->AddLast(item); });
+}
+
+template <class T>
+LinkedList<T>::~LinkedList()
+{
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+}
 #pragma endregion
 
-#pragma region Removing Methods
-    void Delete(T data){
-        Node<T> *temp = head;
-        while(temp != NULL){
-            if(temp->getData() == data){
-                if(temp == head){
-                    head = head->getNext();
-                    head->setPrev(NULL);
-                }
-                else if(temp == tail){
-                    tail = tail->getPrev();
-                    tail->setNext(NULL);
-                }
-                else{
-                    temp->getPrev()->setNext(temp->getNext());
-                    temp->getNext()->setPrev(temp->getPrev());
-                }
-                delete temp;
-                size--;
-                return;
-            }
-            temp = temp->getNext();
-        }
+#pragma region Getters and Setters Implementations
+
+template <typename T>
+int LinkedList<T>::length() noexcept(true)
+{
+    return size;
+}
+
+#pragma endregion
+
+#pragma region Public Methods Implementations
+
+template <class T>
+void LinkedList<T>::AddLast(T data) noexcept(true)
+{
+    shared node(new Node<T>(data));
+    if (head == nullptr)
+    {
+        head = node;
+        tail = node;
     }
-    
-    void DeleteAt(int n){
-        if(n > size){
-            cout << "Invalid Index" << endl;
-            return;
+    else
+    {
+        tail->next = node;
+        node->prev = tail;
+        tail = node;
+    }
+    size++;
+}
+
+template <class T>
+T LinkedList<T>::RemoveLast() // noexcept(head != nullptr)
+{
+    if (head == nullptr)
+    {
+        throw std::out_of_range("List is empty");
+    }
+    else
+    {
+        T data = tail->data;
+        tail = tail->prev.lock();
+        if (tail == nullptr)
+        {
+            head = nullptr;
         }
-        if(n == 0){
-            Node<T> *temp = head;
-            head = head->getNext();
-            head->setPrev(NULL);
-            delete temp;
-        }
-        else if(n == size){
-            Node<T> *temp = tail;
-            tail = tail->getPrev();
-            tail->setNext(NULL);
-            delete temp;
-        }
-        else{
-            Node<T> *temp = head;
-            for(int i = 0; i < n-1; i++){
-                temp = temp->getNext();
-            }
-            temp->getNext()->getNext()->setPrev(temp);
-            temp->setNext(temp->getNext()->getNext());
+        else
+        {
+            tail->next = nullptr;
         }
         size--;
-    }
-    
-    void Dequeue(){
-        if(head == NULL){
-            return;
-        }
-        else{
-            Node<T> *temp = head;
-            head = head->getNext();
-            head->setPrev(NULL);
-            delete temp;
-            size--;
-        }
-    }
-    
-    void Pop(){
-        if(head == NULL){
-            return;
-        }
-        else{
-            Node<T> *temp = tail;
-            tail = tail->getPrev();
-            tail->setNext(NULL);
-            delete temp;
-            size--;
-        }
-    }
-#pragma endregion
-
-#pragma region Properties Methods
-    T headData(){
-        return head->getData();
-    }
-    
-    T tailData(){
-        return tail->getData();
-    }
-    
-    int getSize(){
-        return size;
-    }
-#pragma endregion   
-
-#pragma region Seeker Methods
-    bool Search(T data){
-        Node<T> *temp = head;
-        while(temp != NULL){
-            if(temp->getData() == data){
-                return true;
-            }
-            temp = temp->getNext();
-        }
-        return false;
-    }
-    
-    int IndexOf(T data){
-        Node<T> *temp = head;
-        int index = 0;
-        while(temp != NULL){
-            if(temp->getData() == data){
-                return index;
-            }
-            temp = temp->getNext();
-            index++;
-        }
-        return -1;
-    }
-#pragma endregion
-
-#pragma region Get Methods
-    T Get(int n){
-        if(n > size){
-            cout << "Invalid Index" << endl;
-            return -1;
-        }
-        Node<T> *temp = head;
-        for(int i = 0; i < n; i++){
-            temp = temp->getNext();
-        }
-        return temp->getData();
-    }
-#pragma endregion
-
-#pragma region Set Methods
-    void Set(int n, T data){
-        if(n > size){
-            cout << "Invalid Index" << endl;
-            return;
-        }
-        Node<T> *temp = head;
-        for(int i = 0; i < n; i++){
-            temp = temp->getNext();
-        }
-        temp->setData(data);
-    }
-#pragma endregion
-};
-
-template <class T>
-Doubly_linkedlist::Doubly_linkedlist(T* data, int size){
-    for(int i = 0; i < size; i++){
-        Insert(data[i]);
+        return data;
     }
 }
 
 template <class T>
-Doubly_linkedlist::~Doubly_linkedlist()
+void LinkedList<T>::At(T data, int index) // noexcept(*this.index >= 0 && *this.index < size)
 {
-   head = NULL;
-   tail = NULL;
-   size = 0;
+    if (index < 0 || index >= size)
+    {
+        throw std::out_of_range("Index out of range");
+    }
+    else
+    {
+        shared node = head;
+        for (int i = 0; i < index; i++)
+        {
+            node = node->next;
+        }
+        shared newNode(new Node<T>(data));
+        if (index == 0)
+        {
+            if (size != 0)
+            {
+                node->prev = newNode;
+                newNode->next = node;
+            }
+            head = newNode;
+        }
+        else if (0 <= index && index < size - 1)
+        {
+            node->prev.lock()->next = newNode;
+            newNode->prev = node->prev;
+            node->prev = newNode;
+            newNode->next = node;
+        }
+        else {
+            newNode->prev = node;
+            node->next = newNode;
+            tail = newNode;
+        }
+        size++;
+    }
 }
 
+template <class T>
+T LinkedList<T>::RemoveAt(int index) // znoexcept(*this.index >= 0 && *this.index < size)
+{
+    if (index < 0 || index >= size)
+    {
+        throw std::out_of_range("Index out of range");
+    }
+    else
+    {
+        shared node = head;
+        for (int i = 0; i < index; i++)
+        {
+            node = node->next;
+        }
+        T data = node->data;
+        if (node == head)
+        {
+            head = node->next;
+        }
+        else
+        {
+            node->prev.lock()->next = node->next;
+        }
+        if (node == tail)
+        {
+            tail = node->prev.lock();
+        }
+        else
+        {
+            node->next->prev = node->prev;
+        }
+        size--;
+        return data;
+    }
+}
 
+template <class T>
+template <class R>
+LinkedList<R> LinkedList<T>::Map(Func<R, T> map) // noexcept(true)
+{
+    LinkedList<R> result;
+    shared node = head;
+    while (node != nullptr)
+    {
+        result.AddLast(transformer(node->data));
+        node = node->next;
+    }
+    return result;
+}
+
+template <class T>
+void LinkedList<T>::Print()
+{
+    shared node = head;
+    while (node != nullptr)
+    {
+        cout << node->data << " ";
+        node = node->next;
+    }
+    cout << endl;
+}
+
+template <class T>
+void LinkedList<T>::PrintReverse()
+{
+    shared node = tail;
+    while (node != nullptr)
+    {
+        cout << node->data << " ";
+        node = node->prev.lock();
+    }
+    cout << endl;
+}
+
+#pragma endregion
