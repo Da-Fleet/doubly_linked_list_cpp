@@ -8,6 +8,14 @@
 
 using namespace std;
 
+/**
+ * @brief A function definition that handles any amount of parameters of type T and returns an R
+ *
+ * @return R
+ */
+template <typename R, typename... T>
+using Func = R (*)(T...);
+
 template <class T>
 class Node
 {
@@ -153,17 +161,17 @@ public:
      * @return A transformed Linked List
      */
     template <class R>
-    LinkedList<R> Map(R (*transformer)(T));
+    LinkedList<R> Map(Func<R, T> map);
 
     /**
      * @brief Print the list
-     * 
+     *
      */
     void Print();
 
     /**
      * @brief Print the inverse of the list
-     * 
+     *
      */
     void PrintReverse();
 

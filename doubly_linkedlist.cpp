@@ -229,7 +229,7 @@ T LinkedList<T>::RemoveAt(int index) // znoexcept(*this.index >= 0 && *this.inde
 
 template <class T>
 template <class R>
-LinkedList<R> LinkedList<T>::Map(R (*transformer)(T)) // noexcept(true)
+LinkedList<R> LinkedList<T>::Map(Func<R, T> map) // noexcept(true)
 {
     LinkedList<R> result;
     shared_ptr<Node<T>> node = head;
