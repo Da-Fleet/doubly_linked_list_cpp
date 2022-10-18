@@ -23,25 +23,6 @@ public:
      */
     Node(T data);
 
-#pragma region Copy Semantics
-
-    /**
-     * @brief Copy constructor
-     *
-     * @param other
-     */
-    Node(const Node<T> &other);
-
-    /**
-     * @brief Copy assignment operator
-     *
-     * @param other
-     * @return Node<T>&
-     */
-    Node &operator=(const Node<T> &other);
-
-#pragma endregion
-
 #pragma region Move Semantics
 
     /**
@@ -74,6 +55,14 @@ public:
 #pragma region Constructors and Destructor
 
     /**
+     * @brief Construct a new Linked List object
+     * and use a lambda function to initialize the list
+     *
+     * @param data
+     */
+    LinkedList(vector<T> data);
+
+    /**
      * @brief Construct a new Linked List< T> object
      *
      */
@@ -86,34 +75,6 @@ public:
      * @param list The list to initialize
      */
     LinkedList(initializer_list<T> list);
-
-#pragma region Copy Semantics
-
-    /**
-     * @brief Construct a new Linked List object 
-     * and use a lambda function to initialize the list
-     * 
-     * @param data 
-     */
-    LinkedList(vector<T> data);
-
-
-    /**
-     * @brief Copy constructor
-     *
-     * @param other Other list
-     */
-    LinkedList(const LinkedList<T> &other);
-
-    /**
-     * @brief Copy assignment operator
-     *
-     * @param other
-     * @return LinkedList<T>&
-     */
-    LinkedList<T> &operator=(const LinkedList<T> &other);
-
-#pragma endregion
 
 #pragma region Move Semantics
 
@@ -134,11 +95,11 @@ public:
 
     /**
      * @brief Destroy the Linked List object
-     * 
+     *
      */
     ~LinkedList();
 
-    #pragma endregion
+#pragma endregion
 
 #pragma endregion
 
@@ -149,7 +110,7 @@ public:
      *
      * @return int
      */
-    int getSize() noexcept(true);
+    int length() noexcept(true);
 
 #pragma endregion
 
@@ -167,7 +128,7 @@ public:
      *
      * @return T
      */
-    T RemoveLast() noexcept(*this.head != nullptr);
+    T RemoveLast(); // noexcept(head != nullptr);
 
     /**
      * @brief Add a new node at the index position
@@ -175,7 +136,7 @@ public:
      * @param data
      * @param index
      */
-    void At(T data, int index) noexcept(*this.index >= 0 && *this.index < size);
+    void At(T data, int index); // noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief Removes the node at the index position
@@ -183,17 +144,27 @@ public:
      * @param index
      * @return T
      */
-    T RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < size);
+    T RemoveAt(int index); // noexcept(*this.index >= 0 && *this.index < size);
 
     /**
      * @brief
      *
-     * @param data
-     * @return T
+     * @param transformer
+     * @return A transformed Linked List
      */
-    T RemoveData(T data);
+    template <class R>
+    LinkedList<R> Map(R (*transformer)(T));
 
+    /**
+     * @brief Print the list
+     * 
+     */
     void Print();
+
+    /**
+     * @brief Print the inverse of the list
+     * 
+     */
     void PrintReverse();
 
 #pragma endregion

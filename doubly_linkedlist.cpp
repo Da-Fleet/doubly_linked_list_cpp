@@ -8,21 +8,7 @@ using namespace std;
 template <class T>
 Node<T>::Node(T data) : data(data)
 {
-}
-
-template <class T>
-Node<T>::Node(const Node<T> &other)
-{
-    swap(data, other.data);
-    swap(next, other.next);
-    swap(prev, other.prev);
-}
-
-template <class T>
-Node<T> &Node<T>::operator=(const Node<T> &other)
-{
-    swap(*this, other);
-    return *this;
+    
 }
 
 template <class T>
@@ -36,14 +22,22 @@ Node<T>::Node(Node<T> &&other)
 template <class T>
 Node<T> &Node<T>::operator=(Node<T> &&other)
 {
-    swap(*this, other);
+    // checking for self assignment
+    if (this != &other)
+    {
+        data = other.data;
+        next = other.next;
+        prev = other.prev;
+        other.data = T();
+        other.next = shared_ptr<Node<T>>();
+        other.prev = shared_ptr<Node<T>>();
+    }
     return *this;
 }
 
 template <class T>
 LinkedList<T>::LinkedList()
 {
-    cout<<"Default constructor called"<<endl;
     head = nullptr;
     tail = nullptr;
     size = 0;
@@ -52,38 +46,17 @@ LinkedList<T>::LinkedList()
 template <class T>
 LinkedList<T>::LinkedList(initializer_list<T> list)
 {
+    size = 0;
     for (auto it = list.begin(); it != list.end(); it++)
     {
         this->AddLast(*it);
     }
 }
 
-template <class T>
-LinkedList<T>::LinkedList(const LinkedList<T> &other)
-{
-    cout<<"Copy constructor called"<<endl;
-    swap(head, other.head);
-    swap(tail, other.tail);
-    // swap(size, other.size);
-
-    size = other.size;
-
-    // TODO: Fix me!!!!
-}
-
-template <class T>
-LinkedList<T> &LinkedList<T>::operator=(const LinkedList<T> &other)
-{
-    cout<<"Copy assignment operator called"<<endl;
-    swap(*this, other);
-    return *this;
-}
-
 // Move Semantics
 template <typename T>
 LinkedList<T>::LinkedList(LinkedList<T> &&other)
 {
-    cout<<"Move constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     swap(size, other.size);
@@ -92,22 +65,32 @@ LinkedList<T>::LinkedList(LinkedList<T> &&other)
 template <class T>
 LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &&other)
 {
-    cout<<"Move assignment operator called"<<endl;
-    swap(*this, other);
+    // checking if the object is not being assigned to itself
+    if (this != &other)
+    {
+        head = other.head;
+        tail = other.tail;
+        size = other.size;
+        other.head = nullptr;
+        other.tail = nullptr;
+        other.size = 0;
+    }
     return *this;
 }
 
 #pragma region ctor and dtor
 
 template <class T>
-LinkedList<T>::LinkedList(vector<T> data) {
-    for_each(data.begin(), data.end(), [&](T& item) {
-        this->AddLast(item);
-    });
+LinkedList<T>::LinkedList(vector<T> data)
+{
+    size = 0;
+    for_each(data.begin(), data.end(), [&](T &item)
+             { this->AddLast(item); });
 }
 
 template <class T>
-LinkedList<T>::~LinkedList() {
+LinkedList<T>::~LinkedList()
+{
     head = nullptr;
     tail = nullptr;
     size = 0;
@@ -117,7 +100,7 @@ LinkedList<T>::~LinkedList() {
 #pragma region Getters and Setters Implementations
 
 template <typename T>
-int LinkedList<T>::getSize() noexcept(true)
+int LinkedList<T>::length() noexcept(true)
 {
     return size;
 }
@@ -141,10 +124,11 @@ void LinkedList<T>::AddLast(T data) noexcept(true)
         node->prev = tail;
         tail = node;
     }
+    size++;
 }
 
 template <class T>
-T LinkedList<T>::RemoveLast() noexcept(*this.head != nullptr)
+T LinkedList<T>::RemoveLast() // noexcept(head != nullptr)
 {
     if (head == nullptr)
     {
@@ -168,7 +152,7 @@ T LinkedList<T>::RemoveLast() noexcept(*this.head != nullptr)
 }
 
 template <class T>
-void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.index < size)
+void LinkedList<T>::At(T data, int index) // noexcept(*this.index >= 0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {
@@ -181,12 +165,34 @@ void LinkedList<T>::At(T data, int index) noexcept(*this.index >= 0 && *this.ind
         {
             node = node->next;
         }
-        node->data = data;
+        shared_ptr<Node<T>> newNode(new Node<T>(data));
+        if (index == 0)
+        {
+            if (size != 0)
+            {
+                node->prev = newNode;
+                newNode->next = node;
+            }
+            head = newNode;
+        }
+        else if (0 <= index && index < size - 1)
+        {
+            node->prev.lock()->next = newNode;
+            newNode->prev = node->prev;
+            node->prev = newNode;
+            newNode->next = node;
+        }
+        else {
+            newNode->prev = node;
+            node->next = newNode;
+            tail = newNode;
+        }
+        size++;
     }
 }
 
 template <class T>
-T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < size)
+T LinkedList<T>::RemoveAt(int index) // znoexcept(*this.index >= 0 && *this.index < size)
 {
     if (index < 0 || index >= size)
     {
@@ -222,6 +228,20 @@ T LinkedList<T>::RemoveAt(int index) noexcept(*this.index >= 0 && *this.index < 
 }
 
 template <class T>
+template <class R>
+LinkedList<R> LinkedList<T>::Map(R (*transformer)(T)) // noexcept(true)
+{
+    LinkedList<R> result;
+    shared_ptr<Node<T>> node = head;
+    while (node != nullptr)
+    {
+        result.AddLast(transformer(node->data));
+        node = node->next;
+    }
+    return result;
+}
+
+template <class T>
 void LinkedList<T>::Print()
 {
     shared_ptr<Node<T>> node = head;
@@ -229,6 +249,18 @@ void LinkedList<T>::Print()
     {
         cout << node->data << " ";
         node = node->next;
+    }
+    cout << endl;
+}
+
+template <class T>
+void LinkedList<T>::PrintReverse()
+{
+    shared_ptr<Node<T>> node = tail;
+    while (node != nullptr)
+    {
+        cout << node->data << " ";
+        node = node->prev.lock();
     }
     cout << endl;
 }
