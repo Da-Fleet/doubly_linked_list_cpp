@@ -4,8 +4,8 @@
 
 - Leismael Sosa Hernández
 - Alejandro Yero Valdez
-- Aldair
-- Mauro
+- Aldair Alfonso Pérez
+- Mauro Bolado Vizoso
 
 ## Acerca del proyecto
 
@@ -58,14 +58,14 @@ std::make_shared<type>();
 ### weak_ptr
 
 `std::weak_ptr` es para compartir el `ownership` de un objeto temporalmente.
-`weak_ptr` puede apuntar a objetos `owned` (poseídos) por punteros `shared_ptr`, convirtiéndose así en dueños temporales del objeto, es decir, no modifican el `reference counter` de un `shared_ptr`. 
+`weak_ptr` puede apuntar a objetos `owned` (poseídos) por punteros `shared_ptr`, convirtiéndose así en dueños temporales del objeto, es decir, no modifican el `reference counter` de un `shared_ptr`.
 En nuestra clase `Node` de la Lista doblemente enlazada usamos el puntero `shared_ptr` para apuntar al siguiente nodo y un `weak_ptr` para apuntar al nodo anterior. Esto lo hacemos para ahorrarnos trabajo a la hora de eliminar nodos, puesto que de esta forma al eliminar un nodo `i` el nodo `i+1` tiene una referencia al mismo mediante `prev` pero como es `weak_ptr` no aumenta el reference counter y por ende no impide que se elimine el nodo. Si por el contrario el `prev` fuera también un `shared_ptr` entonces cuando se desea eliminar el nodo `i` con un delete pues el reference counter pasaría de 2 que apuntan al nodo a 1, en vez de a 0 que es lo deseado, es decir, no se eliminaría al momento y tendríamos que hacerle `delete` al `prev` del nodo `i+1`.
 
 ### Como usamos los smart pointers
 
 En nuestro código la clase `Node` reducida se vería de la siguiente forma:
 
-```Cpp
+```cpp
 template <class T>
 class Node
 {
@@ -91,33 +91,25 @@ Vale la pena destacar que aunque C++ no tiene manejo automático de memoria por 
 
 ### Que hacen cada uno de los constructores
 
-Un constructor clasico es el que se encarga de inicializar una instancia de un tipo por 
-defecto, inicializando sus miembros.
+Un constructor clasico es el que se encarga de inicializar una instancia de un tipo por defecto, inicializando sus miembros.
 
-Los constructores de copia en C++ funcionan con las referencias de l-value y la semántica
-de copia (la semántica de copia significa copiar los datos reales del objeto a otro 
-objeto en lugar de hacer que otro objeto señale el objeto ya existente en el montón). 
+Los constructores de copia en C++ funcionan con las referencias de l-value y la semántica de copia (la semántica de copia significa copiar los datos reales del objeto a otro objeto en lugar de hacer que otro objeto señale el objeto ya existente en el montón).
 
-Los constructores de movimiento trabajan en las referencias de r-value y 
-semántica de movimiento (la semántica de movimiento implica apuntar al objeto ya 
+Los constructores de movimiento trabajan en las referencias de r-value y semántica de movimiento (la semántica de movimiento implica apuntar al objeto ya
 existente en la memoria).
 
 Ejemplo:
+
 ```cpp
 template <class T>
-
 Node<T>::Node(Node<T> &&other);
 ```
 
-Al declarar el nuevo objeto y asignarle el r-value, primero se crea un objeto temporal y 
-luego ese objeto temporal se usa para asignar los valores al objeto. Debido a esto, el 
-constructor de copias se llama varias veces y aumenta la sobrecarga y disminuye la 
-potencia computacional del código. Para evitar esta sobrecarga y hacer que el código sea 
-más eficiente, usamos constructores de movimiento
+Al declarar el nuevo objeto y asignarle el r-value, primero se crea un objeto temporal y luego ese objeto temporal se usa para asignar los valores al objeto. Debido a esto, el constructor de copias se llama varias veces y aumenta la sobrecarga y disminuye la potencia computacional del código. Para evitar esta sobrecarga y hacer que el código sea más eficiente, usamos constructores de movimiento.
 
 ### Que es Lvalue y Rvalue
 
-En C++ desde sus inicios se permitió el uso de punteros. Esto permite mucha flexibilidad en el lenguaje, pero a veces mas de la deseada. Por ejemplo, si en una función se tiene un parámetro que es un puntero y lo que se quiere es solamente cambiar el valor al que referencia, pero no hacer aritmética de punteros, ni indexar en un array, ni verificar si el puntero es null, pues se tiene mas complejidad que la deseada. 
+En C++ desde sus inicios se permitió el uso de punteros. Esto permite mucha flexibilidad en el lenguaje, pero a veces mas de la deseada. Por ejemplo, si en una función se tiene un parámetro que es un puntero y lo que se quiere es solamente cambiar el valor al que referencia, pero no hacer aritmética de punteros, ni indexar en un array, ni verificar si el puntero es null, pues se tiene mas complejidad que la deseada.
 
 #### Lvalue
 
@@ -130,7 +122,8 @@ int& r = num; // <-- reference
 
 El fragmento de código de arriba se puede leer como *r es una referencia a `int`*.
 
-> [!question]+ Cuales son las diferencias con un puntero?
+Cuales son las diferencias con un puntero?
+
 > - Deben inicializarse en el momento en que se declaran
 > - No pueden ser indexados a un offset de la memoria a la que apuntan (como en los punteros)
 > - No se puede hacer aritmetica de punteros
@@ -183,17 +176,16 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
 	{
 		this->AddLast(*it);
 	}
-
 }
 ```
 
 ## Pregunta 5
 
 En C++11 y versiones posteriores, una expresión lambda, a menudo denominada lambda,
-es una manera cómoda de definir un objeto de función anónimo (un cierre) 
-justo en la ubicación donde se invoca o se pasa como argumento a una función. 
-Normalmente, las expresiones lambda se usan para encapsular unas líneas de código 
-que se pasan a algoritmos o métodos asíncronicos. 
+es una manera cómoda de definir un objeto de función anónimo (un cierre)
+justo en la ubicación donde se invoca o se pasa como argumento a una función.
+Normalmente, las expresiones lambda se usan para encapsular unas líneas de código
+que se pasan a algoritmos o métodos asíncronicos.
 
 ```cpp
 
@@ -213,15 +205,15 @@ LinkedList::~LinkedList() {
 }
 ```
 
-Cuerpo del método de destrucción de la clase LinkedList, en el cual se eliminan los punteros head y tail. 
+Cuerpo del método de destrucción de la clase LinkedList, en el cual se eliminan los punteros head y tail.
 Es necesario luego de crear una nueva instancia de clase, asignar un puntero o la clase almacena los identificadores de los recursos del sistema que deben liberarse, llamar a un método destructor personalizado que se encargue de limpiar lo que escribimos en el constructor. En caso de no declararse el compilador efectivamente crea uno por default, lo cual no dice que cumpla con todo lo que necesitamos limpiar.
-Un raw pointer es un puntero con un tiempo de vida no controlado en ningún objeto encapsulado. 
+Un raw pointer es un puntero con un tiempo de vida no controlado en ningún objeto encapsulado.
 
 ## Pregunta 6
 
 El destructor en el caso de la LinkedList si hace falta porque adentro de la misma se crea memoria dinamica para los nodos y estos deben ser eliminados
 
-## Pregunta 7 
+## Pregunta 7
 
 ### Noexecpt
 
@@ -230,6 +222,7 @@ Si una funcion no esta hecha para manejar excepciones se debe usar `noexcept`
 ### Inferencia de tipos
 
 Dentro de la inferencia de tipos que facilita C++ se encuentran las siguientes:
+
 - `auto`
 - `decltype`
 - `decltype(auto)`
@@ -324,6 +317,7 @@ return_type (*function_pointer_name) (T1,..., Tn)
 ```
 
 donde:
+
 - `return_type` es el tipo de retorno de la función que acepta el puntero
 - `function_pointer_name` es el nombre del puntero de función que se esta creando
 - `T1, ..., Tn` son los tipos de parámetros que recibe la función a la que el puntero puede apuntar (bien puede estar sin parámetros)
