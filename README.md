@@ -67,7 +67,7 @@ Funciona igual que un `shared_ptr`, puede apuntar a objetos `owned` (poseídos) 
 En nuestro código la clase `Node` reducida se vería de la siguiente forma:
 
 ```cpp
-template <typename T>
+template <class T>
 class Node
 {
 public:
@@ -106,7 +106,7 @@ using string_vector_ptr = std::shared_ptr<string_vector>;
 Para la implementación de la clase `Node` se puede usar un alias para simplificar el nombre del tipo `shared_ptr<Node<T>>`:
 
 ```cpp
-template <typename T>
+template <class T>
 class Node
 {
 public:
@@ -121,7 +121,7 @@ public:
 Para la implementación de la clase `LinkedList` se puede usar un alias para simplificar el nombre del tipo `shared_ptr<Node<T>>`:
 
 ```cpp
-template <typename T>
+template <class T>
 class LinkedList
 {
 public:
@@ -147,7 +147,7 @@ existente en la memoria).
 Ejemplo:
 
 ```cpp
-template <typename T>
+template <class T>
 Node<T>::Node(Node<T> &&other);
 ```
 
@@ -202,7 +202,7 @@ Las mismas restricciones que se le aplican a los `Lvalue` se le aplican a los `R
 Si una clase tiene un constructor de lista de inicializadores `TypeName(initializer_list<SomeType>);`, entonces tiene prioridad sobre otras formas de construcción, siempre que la lista de inicializadores se ajuste al tipo del constructor de la secuencia:
 
 ```cpp
-template <typename T>
+template <class T>
 LinkedList<T>::LinkedList(initializer_list<T> list)
 {
 	size = 0;
@@ -361,7 +361,7 @@ Que tal si pudiéramos inferirlo, esto es una utilidad que nos brinda decltype y
 Una de las grandes ventajas que trae a C++ la incorporación de `decltype` es conocido como `late-specified return type`, que es usado en la sintaxis de funciones y quiere decir que permite que en tiempo de compilación el tipo de retorno de una función sea asignado.
 
 ```cpp
-template<typename T, typename U>
+template<class T, class U>
 auto function(T t, U u) -> decltype (t+u)
 {
 	return t + u;
@@ -373,7 +373,7 @@ auto function(T t, U u) -> decltype (t+u)
 El ultimo problema mencionado anteriormente que resuelve `decltype` es mejorado en C++ 14 con la incorporación del keyword `decltype(auto)`. Esto permite que el código anterior pueda ser reescrito de la siguiente forma:
 
 ```cpp
-template<typename T, typename U>
+template<class T, class U>
 decltype(auto) function(T t, U u)
 {
 	return t + u;
@@ -388,7 +388,7 @@ Los`template parameter pack` que aceptan 1 o mas parámetros templates se llaman
 Un ejemplo de una clase `varidic template` en acción se puede ver con el siguiente código para crear una tupla
 
 ```cpp
-template<typename... Types>
+template<class... Types>
 struct Tuple {};
  
 Tuple<> t0;           // Types no contiene argumentos
@@ -402,7 +402,7 @@ En el código de arriba aunque se pudo definir una tupla genérica pues no se pu
 Un ejemplo de una `varidic function template` que permite definir funciones que reciben cualquier cantidad de parámetros de cualquier tipo es el siguiente:
 
 ```cpp
-template<typename... Types>
+template<class... Types>
 void f(Types... args);
  
 f();       // OK: args no contiene argumentos
@@ -447,7 +447,7 @@ Un `alias` es muy parecido a los `typedef`, en esencia permiten asociar un tipo 
 Un ejemplo de declaración de un `alias` es el siguiente:
 
 ```cpp
-template<typename T>
+template<class T>
 using MyAllocList = std::list<T, MyAlloc<T>>;
 ```
 
@@ -456,7 +456,7 @@ using MyAllocList = std::list<T, MyAlloc<T>>;
 Con los visto en las secciones previas se puede crear un alias a un puntero de una función que permita cualquier cantidad de parámetros de cualquier tipo de la siguiente forma:
 
 ```cpp
-template <typename R, typename... T>
+template <class R, class... T>
 
 using Func = R (*)(T...);
 ```

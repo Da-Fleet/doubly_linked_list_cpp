@@ -14,7 +14,7 @@ using namespace std;
  *
  * @return R
  */
-template <typename R, typename... T>
+template <class R, class... T>
 using Func = R (*)(T...);
 
 template <class T>

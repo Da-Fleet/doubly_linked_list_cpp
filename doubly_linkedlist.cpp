@@ -150,7 +150,7 @@ LinkedList<T>::~LinkedList()
 
 #pragma region Getters and Setters Implementations
 
-template <typename T>
+template <class T>
 int LinkedList<T>::length() noexcept(true)
 {
     return size;
