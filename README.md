@@ -139,7 +139,7 @@ public:
 
 Un constructor clasico es el que se encarga de inicializar una instancia de un tipo por defecto, inicializando sus miembros.
 
-Los constructores de copia en C++ funcionan con las referencias de l-value y la semántica de copia (la semántica de copia significa copiar los datos reales del objeto a otro objeto en lugar de hacer que otro objeto señale el objeto ya existente en el montón).
+Los constructores de copia en C++ funcionan con las referencias de l-value y la semántica de copia (la semántica de copia significa copiar los datos reales del objeto a otro objeto en lugar de hacer que otro objeto señale el objeto ya existente en el heap).
 
 Los constructores de movimiento trabajan en las referencias de r-value y semántica de movimiento (la semántica de movimiento implica apuntar al objeto ya
 existente en la memoria).
@@ -159,14 +159,7 @@ En C++ desde sus inicios se permitió el uso de punteros. Esto permite mucha fle
 
 #### Lvalue
 
-Por todo lo anterior en C++ con el tiempo se agrego el concepto de `referencias` como una alternativa a los punteros para estos casos de uso. Una referencia es como un `alias` a algo
-
-```cpp
-int num = 123;
-int& r = num; // <-- reference
-```
-
-El fragmento de código de arriba se puede leer como *r es una referencia a `int`*.
+Un lvalue es una expresión que produce una referencia de objeto, como un nombre de variable, una referencia de subíndice de matriz, un puntero sin referencia o una llamada de función que devuelve una referencia. Un lvalue siempre tiene una región de almacenamiento definida, por lo que puede tomar su dirección.
 
 Cuales son las diferencias con un puntero?
 
@@ -181,11 +174,7 @@ Cuales son las diferencias con un puntero?
 
 #### Rvalue
 
-Los `Lvalue` son referencias a objetos que tienen "nombre", es decir, que están asociados a una variable o a una función. Los `Rvalue` por otro lado permiten crear referencias a objetos "sin nombre".
-
-```Cpp
-int&& r = 5;
-```
+Un rvalue es una expresión que no es un lvalue. Los ejemplos de valores r incluyen literales, los resultados de la mayoría de los operadores y llamadas a funciones que devuelven no-referencias. Un rvalue no tiene necesariamente ningún almacenamiento asociado.
 
 Los `Rvalue` crean una referencia que dura solamente para el `scope` donde se creo la referencia. Ejemplo
 

@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ class Node
 public:
     T data;
     shared next;
-    weak prev;
+    weak prev; // using a shared_ptr would introduce circular dependencies
 
     /**
      * @brief Construct a new Node object
@@ -33,6 +34,14 @@ public:
      */
     Node(T data);
 
+#pragma region Copy Semantics
+
+    Node(Node<T> &other);
+
+    Node &operator=(Node<T> &other);
+
+#pragma endregion
+
 #pragma region Move Semantics
 
     /**
@@ -40,7 +49,7 @@ public:
      *
      * @param other
      */
-    Node(Node<T> &&other);
+    Node(Node<T> &&other)noexcept;
 
     /**
      * @brief Move Asignment Operator
@@ -48,7 +57,7 @@ public:
      * @param other
      * @return Node<T>&
      */
-    Node &operator=(Node<T> &&other);
+    Node &operator=(Node<T> &&other)noexcept;
 
 #pragma endregion
 };
@@ -62,7 +71,6 @@ private:
     shared head;
     shared tail;
     int size;
-
 public:
 #pragma region Constructors and Destructor
 
@@ -110,6 +118,25 @@ public:
      *
      */
     ~LinkedList();
+
+#pragma endregion
+
+#pragma region Copy Semantics
+
+    /**
+     * @brief Copy Constructor
+     *
+     * @param other
+     */
+    LinkedList(LinkedList<T> &other);
+
+    /**
+     * @brief Copy Assignment Operator
+     *
+     * @param other
+     * @return LinkedList<T>&
+     */
+    LinkedList<T> &operator=(LinkedList<T> &other);
 
 #pragma endregion
 

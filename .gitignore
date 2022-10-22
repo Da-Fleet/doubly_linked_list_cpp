@@ -34,3 +34,7 @@
 # Other files
 .vscode/*
 *.pdf
+
+# Test Files
+test.cpp
+test
