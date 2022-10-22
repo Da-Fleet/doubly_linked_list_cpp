@@ -150,8 +150,8 @@ LinkedList<T>::LinkedList(vector<T> data)
 template <class T>
 LinkedList<T>::~LinkedList()
 {
-    head.delete();
-    tail.delete();
+    delete head;
+    delete tail;
 }
 #pragma endregion
 
