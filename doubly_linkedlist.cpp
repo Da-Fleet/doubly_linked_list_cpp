@@ -19,6 +19,13 @@ Node<T>::Node(Node<T> &other)
 }
 
 template <class T>
+Node<T>::~Node(){
+    delete date;
+    delete next;
+    delete prev;
+}
+
+template <class T>
 Node<T> &Node<T>::operator=(Node<T> &other)
 {
     cout<<"Node copy operator called"<<endl;
