@@ -317,9 +317,16 @@ some_smart_ptr<Object> createObject() // good
 
 ## Pregunta 7
 
-### Noexecpt
+### Operador noexecpt
 
-Si una funcion no esta hecha para manejar excepciones se debe usar `noexcept`
+El operador `noexcept` comprueba en tiempo de compilación si una expresión no arroja una excepción. El operador noexcept no evalúa la expresión.
+
+### Especificador noexcept
+
+Al declarar una función, metodo o función lambda como `noexcept`, se especifica que estos no lanzan excepción y en el caso de hacerlo se para la ejecución del programa.
+Dos buenas razones para el uso de `noexcept` son:
+- Primero, un especificador de excepción documenta el comportamiento de la función. Si una función se especifica como `noexcept`, se puede usar de forma segura en una función que no arroja.
+- En segundo lugar, es una oportunidad de optimización para el compilador. `noexcept` no puede llamar a `std::unexpected` y no puede deshacer la pila. La inicialización de un contenedor puede mover fácilmente los elementos al contenedor si el constructor de movimiento se declara como `noexcept`. Si no se declara como `noexcept`, los elementos pueden ser costosos de copiar en el contenedor.
 
 ### Inferencia de tipos
 
