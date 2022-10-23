@@ -273,7 +273,7 @@ LinkedList::~LinkedList()
 
 ### ¿Hace falta?
 
-Es necesario luego de crear una nueva instancia de una clase o asignar un puntero, llamar a un método destructor personalizado que se encargue de limpiar lo que escribimos en el constructor. En caso de no declararse el compilador efectivamente crea uno por default, lo cual no dice que cumpla con todo lo que necesitamos limpiar.
+No son necesarios los destructores en este caso ya que cuando `C++` por defecto destruye un objeto, lo que hace es llamar al destructor de cada uno de los miembros del objeto. En este caso, como los miembros son punteros, se llama al destructor de cada uno de ellos, lo que hace que se libere la memoria que ocupan. Por lo tanto, no es necesario llamar al destructor de cada uno de los miembros del objeto.
 
 ### Punteros crudos
 

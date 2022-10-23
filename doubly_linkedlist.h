@@ -34,6 +34,12 @@ public:
      */
     Node(T data);
 
+    /**
+     * @brief Destroy the Node object
+     * 
+     */
+    ~Node();
+
 #pragma region Copy Semantics
 
     Node(Node<T> &other);
