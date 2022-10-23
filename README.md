@@ -26,7 +26,7 @@ Los elementos novedosos que se utilizaron fueron a groso modo los siguientes:
 
 ## Pregunta 1
 
-Se implementaron las clases `template`: `LinkedList` y `Node` para la lista doblemente enlazada genérica. `Node` esta conformado por un puntero al siguiente nodo, un puntero al nodo anterior y un puntero al dato que contiene. `LinkedList` esta conformado por un puntero al primer nodo, un puntero al último nodo y un entero que representa el tamaño de la lista. Cada clase tiene sus respectivos constructores, destructores, getters y métodos para agregar y eliminar nodos.
+Se implementaron las clases `template`: `LinkedList` y `Node` para la lista doblemente enlazada genérica. `Node` esta conformado por un puntero al siguiente nodo, un puntero al nodo anterior y un miembro de tipo T. `LinkedList` esta conformado por un puntero al primer nodo, un puntero al último nodo y un entero que representa el tamaño de la lista. Cada clase tiene sus respectivos constructores, destructores, getters y métodos para agregar y eliminar nodos.
 
 ## Pregunta 2
 
@@ -35,7 +35,6 @@ Los nuevos elementos agregados desde C++ 11 que permiten un manejo "inteligente"
 - `std::unique_ptr`
 - `std::shared_ptr`
 - `std::weak_ptr`
-- `std::auto_ptr` (Obsoleto desde C++ 11)
 
 ### unique_ptr
 
@@ -49,14 +48,14 @@ std::unique_ptr<int> ptr = std::make_unique<int>(20);
 
 #### shared_ptr
 
-La implementación de este puntero es mediante una técnica llamada `reference counting`, que guarda la cantidad de punteros `shared_ptr` que apuntan al objeto en cuestión y automáticamente se encarga de bajar el contador cuando se elimina (con delete) alguno de los mismos. Esto permite que cuando se llegue a 0 el objeto sea liberado de memoria automáticamente, quitándole carga al programador.
+La implementación de este puntero es mediante una técnica llamada `reference counting`, que guarda la cantidad de punteros `shared_ptr` que apuntan al objeto en cuestión y automáticamente se encarga de bajar el contador cuando se elimina alguno de los mismos. Esto permite que cuando se llegue a 0 el objeto sea liberado de memoria automáticamente, quitándole carga al programador.
 Un puntero de este tipo se crea de la siguiente forma:
 
 ```Cpp
 std::make_shared<T>(T object);
 ```
 
-Esto resulta muy util cuando se tiene un objeto que es compartido por varios objetos, como por ejemplo un objeto `Node`. En este caso, cada `Node` tiene un puntero al dato que contiene y un puntero al siguiente nodo. Si se tiene una lista de `Node` y se elimina un `Node` de la lista, el `Node` eliminado todavía tiene un puntero al dato que contiene y al siguiente nodo, por lo que si se elimina el `Node` y no se elimina el dato que contiene, se genera un memory leak. Para evitar esto, se puede crear un puntero `shared_ptr` al dato que contiene y así se asegura que el dato no se elimine hasta que no se eliminen todos los `Node` que lo contienen. De esta forma, se puede eliminar un `Node` de la lista sin tener que preocuparse de eliminar el dato que contiene.
+Esto resulta muy util cuando se tiene un objeto que es compartido por varios objetos, como por ejemplo un objeto `Node`. En este caso, cada `Node` tiene un miembro de tipo T que es el dato que contiene y un puntero al siguiente nodo. Si se tiene una lista de `Node` y se elimina un `Node` de la lista, el `Node` eliminado todavía tiene al dato que contiene y al siguiente nodo, por lo que si se elimina el `Node` se perdería el dato y el siguiente nodo. Para evitar esto, se puede crear un puntero `shared_ptr` al `Node` que se va a eliminar y asignarle el puntero al siguiente nodo del `Node` que se va a eliminar. De esta forma, el `Node` eliminado todavía tiene al dato que contiene y al siguiente nodo, pero el `Node` eliminado no se elimina de memoria hasta que no se eliminen todos los punteros `shared_ptr` que apuntan a el.
 
 ### weak_ptr
 
@@ -79,7 +78,7 @@ public:
 };
 ```
 
-Como se puede ver, el puntero al dato que contiene es de tipo `shared_ptr` y el puntero al nodo anterior es de tipo `weak_ptr`. Si se utilizaría un `shared_ptr` para el nodo anterior, ocurre una dependencia cíclica:
+Como se puede ver, el puntero al nodo siguiente es de tipo `shared_ptr` y el puntero al nodo anterior es de tipo `weak_ptr`. Si se utilizaría un `shared_ptr` para el nodo anterior, ocurre una dependencia cíclica:
 
 ```cpp
 object A --> object B -- > object C 
@@ -87,11 +86,11 @@ object A --> object B -- > object C
 	 \---------/   \---------/
 ```
 
- Lo que implica que si se elimina `object B`, el `reference counting` baja a 1, por lo que no se destruye de la memoria y esto es lo que se necesita. Si se utiliza un `weak_ptr` para el nodo anterior, se evita esta dependencia cíclica y se puede eliminar `object B` sin problemas.
+ Lo que implica que si se elimina `object B`, el `reference counting` baja a 1, por lo que no se destruye de la memoria y esto es lo que se necesita. Si se utiliza un `weak_ptr` para el nodo anterior de `object C`, se evita esta dependencia cíclica y se elimina `object B` sin problemas automáticamente.
 
 ### Filosofía de C++ en el manejo de memoria
 
-C++ como tal no tiene una filosofía estándar para el manejo de la memoria. C++ da la libertad y responsabilidad completa al programador de asignar y liberar la memoria dinámica. Aun así, en la comunidad se encuentran patrones a seguir para evitar fuga de memoria. Uno de estos patrones es **RAII** (Resource Acquisition Is Initialization), que plantea en resumen que si un objeto es instanciado en la memoria dinámica dentro de un *scope* pues que debe ser liberado antes de salir del mismo.
+C++ como tal no tiene una filosofía estándar para el manejo de la memoria. C++ da la libertad y responsabilidad completa al programador de asignar y liberar la memoria dinámica. Aun así, en la comunidad se encuentran patrones a seguir para evitar fuga de memoria. Uno de estos patrones es **RAII** (Resource Acquisition Is Initialization), que plantea en resumen que si un objeto es instanciado en la memoria dinámica dentro de un `scope` pues que debe ser liberado antes de salir del mismo.
 Vale la pena destacar que aunque C++ no tiene manejo automático de memoria por defecto, pues que existen librerías que permiten usar un garbage collector. Una de estas librerías es `boost::smart_ptr` que permite usar punteros inteligentes como `unique_ptr` y `shared_ptr`.
 
 ### Alias para simplificar nombres de tipos
@@ -111,10 +110,10 @@ class Node
 {
 public:
 	T data;
-	using node_ptr = std::shared_ptr<Node<T>>;
-	node_ptr next;
-	using node_weak_ptr = std::weak_ptr<Node<T>>;
-	node_weak_ptr prev;
+    using shared = shared_ptr<Node<T>>;
+	shared next;
+	using weak = weak_ptr<Node<T>>;
+	weak prev;
 };
 ```
 
@@ -125,10 +124,10 @@ template <class T>
 class LinkedList
 {
 public:
-	using node_ptr = std::shared_ptr<Node<T>>;
-	using node_weak_ptr = std::weak_ptr<Node<T>>;
-	node_ptr head;
-	node_ptr tail;
+	using shared = std::shared_ptr<Node<T>>;
+	using weak = std::weak_ptr<Node<T>>;
+	shared head;
+	shared tail;
 	int size;
 };
 ```
@@ -137,12 +136,11 @@ public:
 
 ### Que hacen cada uno de los constructores
 
-Un constructor clasico es el que se encarga de inicializar una instancia de un tipo por defecto, inicializando sus miembros.
+Un constructor clásico es el que se encarga de inicializar una instancia de un tipo por defecto, inicializando sus miembros.
 
-Los constructores de copia en C++ funcionan con las referencias de l-value y la semántica de copia (la semántica de copia significa copiar los datos reales del objeto a otro objeto en lugar de hacer que otro objeto señale el objeto ya existente en el heap).
+Los constructores de copia en C++ funcionan con las referencias de `l-value` y la semántica de copia (la semántica de copia significa copiar los datos reales del objeto a otro objeto en lugar de hacer que otro objeto señale el objeto ya existente en el heap).
 
-Los constructores de movimiento trabajan en las referencias de r-value y semántica de movimiento (la semántica de movimiento implica apuntar al objeto ya
-existente en la memoria).
+Los constructores de movimiento trabajan en las referencias de `r-value` y semántica de movimiento (la semántica de movimiento implica apuntar al objeto ya existente en la memoria).
 
 Ejemplo:
 
@@ -151,7 +149,7 @@ template <class T>
 Node<T>::Node(Node<T> &&other);
 ```
 
-Al declarar el nuevo objeto y asignarle el r-value, primero se crea un objeto temporal y luego ese objeto temporal se usa para asignar los valores al objeto. Debido a esto, el constructor de copias se llama varias veces y aumenta la sobrecarga y disminuye la potencia computacional del código. Para evitar esta sobrecarga y hacer que el código sea más eficiente, usamos constructores de movimiento.
+Al declarar el nuevo objeto y asignarle el `r-value`, primero se crea un objeto temporal y luego ese objeto temporal se usa para asignar los valores al objeto. Debido a esto, el constructor de copias se llama varias veces y aumenta la sobrecarga y disminuye la potencia computacional del código. Para evitar esta sobrecarga y hacer que el código sea más eficiente, usamos constructores de movimiento.
 
 ### Que es Lvalue y Rvalue
 
@@ -176,9 +174,9 @@ Cuales son las diferencias con un puntero?
 
 Un rvalue es una expresión que no es un lvalue. Los ejemplos de valores r incluyen literales, los resultados de la mayoría de los operadores y llamadas a funciones que devuelven no-referencias. Un rvalue no tiene necesariamente ningún almacenamiento asociado.
 
-Los `Rvalue` crean una referencia que dura solamente para el `scope` donde se creo la referencia. Ejemplo
+Los Rvalue crean una referencia que dura solamente para el `scope` donde se creo la referencia. Ejemplo
 
-```Cpp
+```cpp
 {
     // 5 es el rvalue
     // No es temporal por esta linea
@@ -237,9 +235,7 @@ std::vector<int> v = {1, 2, 3, 4, 5};
 
 ## Pregunta 5
 
-En C++ 11 y versiones posteriores, una expresión lambda, a menudo denominada lambda, es una manera cómoda de definir un objeto de función anónimo justo en la ubicación donde se invoca o se pasa como argumento a una función.
-Normalmente, las expresiones lambda se usan para encapsular unas líneas de código
-que se pasan a algoritmos o métodos asíncronicos. Además, se implementa un constructor que recibe un `vector<T>`:
+En C++ 11 y versiones posteriores, una expresión lambda, a menudo denominada lambda, es una manera cómoda de definir un objeto de función anónimo justo en la ubicación donde se invoca o se pasa como argumento a una función. Normalmente, las expresiones lambda se usan para encapsular unas líneas de código que se pasan a algoritmos o métodos asíncronicos. Además, se implementa un constructor que recibe un `vector<T>`:
 
 ```cpp
 LinkedList(vector<T> data){
@@ -251,7 +247,6 @@ LinkedList(vector<T> data){
 
 En el código anterior se ve claramente la sintaxis del `for_each`, en el cual el tercer argumento es la expresión lambda que es la encargada de por cada elemento contable en data añadirlo dentro del cuerpo de la `LinkedList`.
 
-
 ## Pregunta 6
 
 El destructor se define de la siguiente manera:
@@ -261,7 +256,7 @@ Node::~Node()
 {
 	next = nullptr;
 	prev = nullptr;
-	data = nullptr;
+	delete data;
 }
 
 LinkedList::~LinkedList()
@@ -325,6 +320,7 @@ El operador `noexcept` comprueba en tiempo de compilación si una expresión no 
 
 Al declarar una función, metodo o función lambda como `noexcept`, se especifica que estos no lanzan excepción y en el caso de hacerlo se para la ejecución del programa.
 Dos buenas razones para el uso de `noexcept` son:
+
 - Primero, un especificador de excepción documenta el comportamiento de la función. Si una función se especifica como `noexcept`, se puede usar de forma segura en una función que no arroja.
 - En segundo lugar, es una oportunidad de optimización para el compilador. `noexcept` no puede llamar a `std::unexpected` y no puede deshacer la pila. La inicialización de un contenedor puede mover fácilmente los elementos al contenedor si el constructor de movimiento se declara como `noexcept`. Si no se declara como `noexcept`, los elementos pueden ser costosos de copiar en el contenedor.
 
@@ -338,7 +334,7 @@ Dentro de la inferencia de tipos que facilita C++ se encuentran las siguientes:
 
 #### Auto
 
-Auto fue introducido en C++ 11 y en esencia permite la declaracion de variables de forma tal que su tipo sea determinado a partir de los tipos de sus inicializadores.
+Auto fue introducido en C++ 11 y en esencia permite la declaración de variables de forma tal que su tipo sea determinado a partir de los tipos de sus inicializadores.
 
 ```cpp
 int x = 30; //Aqui se especifica el tipo
@@ -363,7 +359,7 @@ int x = 10;
 decltype(x) y; //Aqui y es del mismo tipo que x, de tipo int
 ```
 
-Que tal si pudiéramos inferirlo, esto es una utilidad que nos brinda decltype y auto y se conoce como late-specified return type (especificación de tipos tardada), ya que el tipo de retorno es asignado en compilación, esto se logra con la siguiente sintaxis:
+Que tal si pudiéramos inferirlo, esto es una utilidad que nos brinda `decltype` y `auto` y se conoce como late-specified return type (especificación de tipos tardada), ya que el tipo de retorno es asignado en compilación, esto se logra con la siguiente sintaxis:
 
 Una de las grandes ventajas que trae a C++ la incorporación de `decltype` es conocido como `late-specified return type`, que es usado en la sintaxis de funciones y quiere decir que permite que en tiempo de compilación el tipo de retorno de una función sea asignado.
 
@@ -377,7 +373,7 @@ auto function(T t, U u) -> decltype (t+u)
 
 #### Decltype(auto)
 
-El ultimo problema mencionado anteriormente que resuelve `decltype` es mejorado en C++ 14 con la incorporación del keyword `decltype(auto)`. Esto permite que el código anterior pueda ser reescrito de la siguiente forma:
+El último problema mencionado anteriormente que resuelve `decltype` es mejorado en C++ 14 con la incorporación del keyword `decltype(auto)`. Esto permite que el código anterior pueda ser reescrito de la siguiente forma:
 
 ```cpp
 template<class T, class U>
@@ -390,7 +386,7 @@ decltype(auto) function(T t, U u)
 ## Pregunta 8
 
 C++ 11 incorporo al lenguaje un nuevo tipo de template llamado `template parameter pack` que acepta 0 o mas parámetros templates.
-Los`template parameter pack` que aceptan 1 o mas parámetros templates se llaman `varidic templates`
+Los `template parameter pack` que aceptan 1 o mas parámetros templates se llaman `varidic templates`
 
 Un ejemplo de una clase `varidic template` en acción se puede ver con el siguiente código para crear una tupla
 
@@ -448,16 +444,6 @@ int main()
 
 ```
 
-### Alias
-
-Un `alias` es muy parecido a los `typedef`, en esencia permiten asociar un tipo a un nombre mas simple, pero con la ventaja sobre `typedef` de que puedes usar `templates` sobre el alias.
-Un ejemplo de declaración de un `alias` es el siguiente:
-
-```cpp
-template<class T>
-using MyAllocList = std::list<T, MyAlloc<T>>;
-```
-
 ### Puntero a funcion generica con alias
 
 Con los visto en las secciones previas se puede crear un alias a un puntero de una función que permita cualquier cantidad de parámetros de cualquier tipo de la siguiente forma:
@@ -468,4 +454,4 @@ template <class R, class... T>
 using Func = R (*)(T...);
 ```
 
-El código de arriba es el que tenemos implementado en el proyecto de la linked list.
+El código de arriba es el que tenemos implementado en el proyecto de la `LinkedList`.

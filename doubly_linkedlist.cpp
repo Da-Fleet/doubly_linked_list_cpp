@@ -20,7 +20,7 @@ Node<T>::Node(Node<T> &other)
 
 template <class T>
 Node<T>::~Node(){
-    date = nullptr;
+    delete date;
     next = nullptr;
     prev = nullptr;
 }
