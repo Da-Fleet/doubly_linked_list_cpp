@@ -1,27 +1,57 @@
 #include "doubly_linkedlist.h"
-#include <algorithm>
 
 using namespace std;
-
-#pragma region Constructors and Destructors Implementations
 
 template <class T>
 Node<T>::Node(T data) : data(data)
 {
-    
+    cout<<"Node default constructor called"<<endl;
 }
 
 template <class T>
-Node<T>::Node(Node<T> &&other)
+Node<T>::Node(Node<T> &other)
 {
-    swap(data, other.data);
-    swap(next, other.next);
-    swap(prev, other.prev);
+    cout<<"Node copy constructor called"<<endl;
+    //Deep Copy
+    this->data = other.data;
+    this->next = other.next;
+    this->prev = other.prev;
 }
 
 template <class T>
-Node<T> &Node<T>::operator=(Node<T> &&other)
+Node<T> &Node<T>::operator=(Node<T> &other)
 {
+    cout<<"Node copy operator called"<<endl;
+    //Deep Copy
+    this->data = other.data;
+    this->next = other.next;
+    this->prev = other.prev;
+    return *this;
+}
+
+template <class T>
+Node<T>::Node(Node<T> &&other)noexcept
+{
+    cout<<"Node move constructor called"<<endl;
+    //Checking for self assignment
+    if (this != &other)
+    {
+        //Move data
+        this->data = other.data;
+        this->next = other.next;
+        this->prev = other.prev;
+
+        //Delete other
+        other.data = T();
+        other.next = nullptr;
+        other.prev.lock() = nullptr;
+    }
+}
+
+template <class T>
+Node<T> &Node<T>::operator=(Node<T> &&other)noexcept
+{
+    cout<<"Node move operator called"<<endl;
     // checking for self assignment
     if (this != &other)
     {
@@ -29,8 +59,8 @@ Node<T> &Node<T>::operator=(Node<T> &&other)
         next = other.next;
         prev = other.prev;
         other.data = T();
-        other.next = shared();
-        other.prev = shared();
+        other.next = nullptr;
+        other.prev.lock = nullptr;
     }
     return *this;
 }
@@ -38,6 +68,7 @@ Node<T> &Node<T>::operator=(Node<T> &&other)
 template <class T>
 LinkedList<T>::LinkedList()
 {
+    cout<<"LinkedList default constructor called"<<endl;
     head = nullptr;
     tail = nullptr;
     size = 0;
@@ -53,10 +84,31 @@ LinkedList<T>::LinkedList(initializer_list<T> list)
     }
 }
 
-// Move Semantics
-template <typename T>
+template <class T>
+LinkedList<T>::LinkedList(LinkedList<T> &other)
+{
+    cout<<"LinkedList copy constructor called"<<endl;
+    //Deep Copy
+    head = other.head;
+    tail = other.tail;
+    size = other.size;
+}
+
+template <class T>
+LinkedList<T> &LinkedList<T>::operator=(LinkedList<T> &other)
+{
+    cout<<"LinkedList copy operator called"<<endl;
+    //Deep Copy
+    head = other.head;
+    tail = other.tail;
+    size = other.size;
+    return *this;
+}
+
+template <class T>
 LinkedList<T>::LinkedList(LinkedList<T> &&other)
 {
+    cout<<"LinkedList move constructor called"<<endl;
     swap(head, other.head);
     swap(tail, other.tail);
     swap(size, other.size);
@@ -91,9 +143,8 @@ LinkedList<T>::LinkedList(vector<T> data)
 template <class T>
 LinkedList<T>::~LinkedList()
 {
-    head = nullptr;
-    tail = nullptr;
-    size = 0;
+    head.delete();
+    tail.delete();
 }
 #pragma endregion
 
