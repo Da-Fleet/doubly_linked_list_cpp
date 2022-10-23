@@ -20,9 +20,9 @@ Node<T>::Node(Node<T> &other)
 
 template <class T>
 Node<T>::~Node(){
-    delete date;
-    delete next;
-    delete prev;
+    date = nullptr;
+    next = nullptr;
+    prev = nullptr;
 }
 
 template <class T>
@@ -150,8 +150,8 @@ LinkedList<T>::LinkedList(vector<T> data)
 template <class T>
 LinkedList<T>::~LinkedList()
 {
-    delete head;
-    delete tail;
+    head = nullptr;
+    tail = nullptr;
 }
 #pragma endregion
 

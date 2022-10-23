@@ -237,7 +237,7 @@ std::vector<int> v = {1, 2, 3, 4, 5};
 
 ## Pregunta 5
 
-En C++11 y versiones posteriores, una expresión lambda, a menudo denominada lambda, es una manera cómoda de definir un objeto de función anónimo justo en la ubicación donde se invoca o se pasa como argumento a una función.
+En C++ 11 y versiones posteriores, una expresión lambda, a menudo denominada lambda, es una manera cómoda de definir un objeto de función anónimo justo en la ubicación donde se invoca o se pasa como argumento a una función.
 Normalmente, las expresiones lambda se usan para encapsular unas líneas de código
 que se pasan a algoritmos o métodos asíncronicos. Además, se implementa un constructor que recibe un `vector<T>`:
 
@@ -259,21 +259,21 @@ El destructor se define de la siguiente manera:
 ```cpp
 Node::~Node()
 {
-	delete next;
-	delete prev;
-	delete data;
+	next = nullptr;
+	prev = nullptr;
+	data = nullptr;
 }
 
 LinkedList::~LinkedList()
 {
-	delete head;
-	delete tail;
+	head = nullptr;
+	tail = nullptr;
 }
 ```
 
 ### ¿Hace falta?
 
-No son necesarios los destructores en este caso ya que cuando `C++` por defecto destruye un objeto, lo que hace es llamar al destructor de cada uno de los miembros del objeto. En este caso, como los miembros son punteros, se llama al destructor de cada uno de ellos, lo que hace que se libere la memoria que ocupan. Por lo tanto, no es necesario llamar al destructor de cada uno de los miembros del objeto.
+No son necesarios los destructores en este caso ya que cuando C++ por defecto destruye un objeto, lo que hace es llamar al destructor de cada uno de los miembros del objeto. En este caso, como los miembros son punteros, se llama al destructor de cada uno de ellos, lo que hace que se libere la memoria que ocupan. Por lo tanto, no es necesario llamar al destructor de cada uno de los miembros del objeto.
 
 ### Punteros crudos
 
